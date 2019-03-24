@@ -3,6 +3,7 @@ package com.initcat.user_service.model.db;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
 
