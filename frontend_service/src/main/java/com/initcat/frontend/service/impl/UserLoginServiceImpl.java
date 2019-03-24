@@ -25,7 +25,7 @@ public class UserLoginServiceImpl implements UserLoginService {
 	@Override
 	public LoginResponse login(LoginRequest loginRequest) {
 		LoginReq req = new LoginReq();
-		userService.login(req)
+		userService.login(req);
 		return null;
 	}
 }
