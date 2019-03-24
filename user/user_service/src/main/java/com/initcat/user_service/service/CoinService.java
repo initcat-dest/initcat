@@ -1,12 +1,24 @@
 package com.initcat.user_service.service;
 
-import com.initcat.user_service.model.db.CoinAccountInfo;
+import java.util.Map;
 
 
 public interface CoinService {
-    CoinAccountInfo openAccount();
+    /**
+     * 开户
+     * @return
+     */
+    Map<Object, Object> openAccount(Long coinBalance, Integer accountStatus);
 
-    void recharge();
+    /**
+     * 充值
+     */
+    Map<Object, Object> recharge(Integer coinBalance,Integer accountStatus,Integer operateCoin,
+                                 Integer tradeCoin);
 
-    void consume();
+    /**
+     * 消费
+     */
+    Map<Object, Object> consume(Integer coinBalance,Integer accountStatus,Integer operateCoin,
+                                Integer transCode,String transMsg, Integer tradeCoin);
 }
