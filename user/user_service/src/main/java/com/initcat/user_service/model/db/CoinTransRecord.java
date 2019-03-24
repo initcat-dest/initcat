@@ -35,7 +35,7 @@ public class CoinTransRecord {
 	/**
 	 * 交易余额
 	 */
-	private Long tradeCoin;
+	private Integer tradeCoin;
 	/**
 	 * 创建时间
 	 */
