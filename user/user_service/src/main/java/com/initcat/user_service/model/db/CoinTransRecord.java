@@ -29,6 +29,15 @@ public class CoinTransRecord implements Serializable {
 	 * 操作金币
 	 */
 	private Integer operateCoin;
+
+    /**
+     *交易码
+     */
+    private Integer transCode;
+    /**
+     * 交易描述码
+     */
+    private String transMsg;
 	/**
 	 * 操作类型 1：充值 ，2：消费
 	 */
