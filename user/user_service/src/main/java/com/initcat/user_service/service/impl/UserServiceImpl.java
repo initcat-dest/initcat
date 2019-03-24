@@ -1,6 +1,5 @@
 package com.initcat.user_service.service.impl;
 
-import com.alibaba.druid.util.HttpClientUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.initcat.user_common.model.dto.CommUserDTO;
 import com.initcat.user_common.model.req.LoginReq;
@@ -21,7 +20,7 @@ import static com.initcat.user_common.model.enums.LoginStatusEnum.LOGIN_SUCCESS;
 @Component
 public class UserServiceImpl implements UserService {
 
-    private static Logger logger = LoggerFactory.getLogger(HttpClientUtils.class);
+    private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     UserDao userDao;
