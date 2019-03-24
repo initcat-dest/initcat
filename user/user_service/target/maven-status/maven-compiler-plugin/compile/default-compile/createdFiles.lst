@@ -1,9 +1,0 @@
-com/initcat/user_service/service/impl/UserServiceImpl.class
-com/initcat/user_service/constant/UserConstant.class
-com/initcat/user_service/controller/LoginController.class
-com/initcat/user_service/dao/impl/UserDaoImpl.class
-com/initcat/user_service/dao/UserDao.class
-com/initcat/user_service/UserServiceApplication.class
-com/initcat/user_service/constant/redis/UserRedisConstant.class
-com/initcat/user_service/model/db/CommUser.class
-com/initcat/user_service/repository/CommUserRepository.class
