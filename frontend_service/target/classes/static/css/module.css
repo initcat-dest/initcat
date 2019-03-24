@@ -1,0 +1,49 @@
+﻿/*-- logo+导航 --*/
+#head{ background:#0c635a; height:103px}
+#head .logo{display:block; float:left;width:490px;height:63px;line-height:25px; color:#fff;position: relative;cursor: pointer; margin-top:20px;}
+#head .logo a{ color:#FFF}
+#head .logo img{position:relative;float:left;}
+#head .logo span{position:relative;float:left;margin:10px 0px 0 14px;width:325px;font-size:25px; }
+#head .logo p{position:relative;float:left;margin:0 0px 0 14px;width:325px; font-size:12px}
+#head .headR{ width:500px;}
+#head .headRset{ line-height:20px; color:#fbc711;}
+#head .headRset a{color:#fbc711;display:block; float:right; margin-left:10px;}
+#head .headRset a:hover{color:#fff;}
+#head .headRset a.h_r01{ background: url(../images/coin.png) 0 2px no-repeat;margin-left:15px; width:22px;}
+#head .headRset a:hover.h_r01{background: url(../images/coin.png) -27px 2px no-repeat;}
+#head .headRset a.h_r02{ background: url(../images/coin.png) 0 -20px no-repeat;margin-left:15px; width:22px;}
+#head .headRset a:hover.h_r02{background: url(../images/coin.png) -27px -20px no-repeat;}
+#head .headRset a.h_r03{ background: url(../images/coin.png) 0 -44px no-repeat;margin-left:15px; width:22px;}
+#head .headRset a:hover.h_r03{background: url(../images/coin.png) -27px -44px no-repeat;}
+#head .headRfast{ line-height:22px; color:#fbc711; margin-top:25px;}
+#head .headRfast a{color:#fff;display:block; float:right; margin-left:15px; padding-left:28px;}
+#head .headRfast a:hover{color:#fbc711;}
+#head .headRfast a.h_f01{ background: url(../images/coin.png) -145px -64px no-repeat;}
+#head .headRfast a:hover.h_f01{background: url(../images/coin.png) 0 -64px no-repeat;}
+#head .headRfast a.h_f02{ background: url(../images/coin.png) -145px -87px no-repeat;}
+#head .headRfast a:hover.h_f02{background: url(../images/coin.png) 0 -87px no-repeat;}
+#head .headRfast a.h_f03{ background: url(../images/coin.png) -145px -110px no-repeat;}
+#head .headRfast a:hover.h_f03{background: url(../images/coin.png) 0 -110px no-repeat;}
+/*---- 分页 ----*/
+.paginationBox {width:450px;  text-align:center; display:table;font-size:12px;}
+.paginationBox span a{display:inline-block; background:#fff; border: 1px solid #cdcdcd;color:#333;cursor: default;height: 23px;line-height:23px;text-align: center; padding:0 8px;}
+.paginationBox span a:hover,.paginationBox span a.active {background:#62a40f; color: #FFFFFF; border:1px solid #62a40f;}
+
+/*-- 导航 --*/
+#navmenu{font-size:16px;height:28px;line-height:28px;}
+#navmenu a{display:block; float:left; padding:0 41px 0 42px; color:#FFF; background:#019693}
+#navmenu a:hover{ color:#fbc711}
+#navmenu a.n_m01{ background:#c8efee; color:#0366ac}
+#navmenu a:hover.n_m01{color:#333}
+/*-- 注册 登陆 --*/
+.inlogin .l_01 a , .inlogin .l_02 a {display:block; width:60px; height:20px;color:#fff; line-height:20px;}
+.inlogin .l_01 a { background:#f3840c}
+.inlogin .l_01 a:hover{background:#ef6a08;}
+.inlogin .l_02 a { background:#838281}
+.inlogin .l_02 a:hover{background:#696867;}
+
+/*-- 正文 --*/
+#content{}
+
+/* 底部 */
+#footer{ background:#ededed; line-height:20px; padding:15px 0;}

@@ -1,0 +1,11 @@
+com/initcat/frontend/FrontendServiceApplication.class
+com/initcat/frontend/consumer/service/impl/ConsumerTestServiceImpl.class
+com/initcat/frontend/controller/LoginController.class
+com/initcat/frontend/service/TestService.class
+com/initcat/frontend/consumer/service/ConsumerTestService.class
+com/initcat/frontend/model/LoginResponse.class
+com/initcat/frontend/model/LoginRequest.class
+com/initcat/frontend/common/Constant.class
+com/initcat/frontend/config/GlobalConfig.class
+com/initcat/frontend/utils/HttpClientUtils.class
+com/initcat/frontend/service/impl/TestServiceImpl.class

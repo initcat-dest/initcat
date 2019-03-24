@@ -1,0 +1,26 @@
+/* ±³¾° */
+.inbg{background:url(../bimages/inbg.png) center top no-repeat scroll;background-size:cover;height:100%;left:0;position:absolute;top:0;width:100%;}
+/* ÁÐ±í */
+#navmenu{font-size:16px;}
+#navmenu ul {height:410px; }
+#navmenu ul li {float:left;position:relative;text-align:center;}
+#navmenu ul li a {width:166px;color:#fff; padding:100px 0 40px 0; line-height:30px; display:block}
+#navmenu ul li.menu_01,#navmenu ul li.menu_02,#navmenu ul li.menu_03,#navmenu ul li.menu_04,#navmenu ul li.menu_05,#navmenu ul li.menu_06,#navmenu ul li.menu_07{margin-right:45px; margin-bottom:60px;}
+#navmenu ul li.menu_01 a {background:url(../bimages/nbg.png) no-repeat; }
+#navmenu ul li.menu_01 a:hover {background:url(../bimages/nbg.png) -183px 0 no-repeat;}
+#navmenu ul li.menu_02 a {background:url(../bimages/nbg.png) 0 -176px no-repeat;}
+#navmenu ul li.menu_02 a:hover {background:url(../bimages/nbg.png) -183px -176px no-repeat;}
+#navmenu ul li.menu_03 a {background:url(../bimages/nbg.png) 0 -352px no-repeat;}
+#navmenu ul li.menu_03 a:hover {background:url(../bimages/nbg.png) -183px -352px no-repeat;}
+#navmenu ul li.menu_04 a {background:url(../bimages/nbg.png) 0 -528px no-repeat;}
+#navmenu ul li.menu_04 a:hover {background:url(../bimages/nbg.png) -183px -528px no-repeat;}
+#navmenu ul li.menu_05 a {background:url(../bimages/nbg.png) 0 -704px no-repeat;}
+#navmenu ul li.menu_05 a:hover {background:url(../bimages/nbg.png) -183px -704px no-repeat;}
+#navmenu ul li.menu_06 a {background:url(../bimages/nbg.png) 0 -880px no-repeat;}
+#navmenu ul li.menu_06 a:hover {background:url(../bimages/nbg.png) -183px -880px no-repeat;}
+#navmenu ul li.menu_07 a {background:url(../bimages/nbg.png) 0 -1056px no-repeat;}
+#navmenu ul li.menu_07 a:hover {background:url(../bimages/nbg.png) -183px -1056px no-repeat;}
+#navmenu ul li > .submenu { width:125px;display:none;font-weight:normal;left:20px;position:absolute;top:170px;z-index:10000000;}
+#navmenu ul li > .submenu li{ font-size:14px; height:28px;line-height:28px; background:url(../bimages/naver_02.png);color:#0f3c5b;text-align:center;}
+#navmenu ul li > .submenu li a{ color:#0f3c5b;width:115px;display:block; height:28px;line-height:28px; padding:0 5px; background:none}
+#navmenu ul li > .submenu li a:hover{ color:#5996b6;background:none}

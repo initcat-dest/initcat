@@ -1,0 +1,61 @@
+/*-- / 顶部 / --*/
+#top{background:#782f90 url(../bimages/top_bg.png) left top repeat-x; height:105px;}
+.logo{ text-align:left; background:url(../bimages/top_pic.png) right bottom no-repeat; width:800px; height:105px; padding:20px 0  0 10px}
+.logotext{text-align:left; font-size:30px; color:#FFF; line-height:100px; margin-left:20px; -moz-text-shadow:2px 1px 0 rgba(0, 0, 0, 0.3); -webkit-text-shadow:2px 1px 0 rgba(0, 0, 0, 0.3); text-shadow:2px 1px 0 rgba(0, 0, 0, 0.3);}
+.welcome{background:url(../bimages/topicon.png) 0 8px no-repeat; padding-left:22px;}
+.topAd{ margin-top:10px;}
+.topAd a{display:block;height:40px;color:#FFF;padding-top:28px;margin-left:15px;float:right;font-size:12px;line-height:19px; width:48px; text-align:center;}
+.topAd a.t_01{ background:url(../bimages/top_icon.png) 10px 0px no-repeat}
+.topAd a:hover.t_01{ background:url(../bimages/top_icon.png) 10px -60px no-repeat; color:#8afa95}
+.topAd a.t_02{ background:url(../bimages/top_icon.png) -70px 0px no-repeat}
+.topAd a:hover.t_02{ background:url(../bimages/top_icon.png) -70px -60px no-repeat; color:#8afa95}
+.topAd a.t_03{ background:url(../bimages/top_icon.png) -145px 0px no-repeat}
+.topAd a:hover.t_03{ background:url(../bimages/top_icon.png) -145px -60px no-repeat; color:#8afa95}
+
+/*-- 当前位置 --*/
+.location{ padding-left:28px;background:#e8e8e8 url(../bimages/coin03.png) 10px -78px no-repeat; line-height:35px;text-align:left;color:#666;  margin:0 10px 10px 15px; }
+.location a{color:#666;}
+.location a:hover{color:#318c6d;}
+
+/*-- 容器 --*/
+#container{padding:0 5px; background:#fff url(../bimages/left_bg.jpg) repeat-y;}
+#incontainer{padding:0 5px; background:#fff url(../bimages/left_bg.jpg) repeat-y;}
+
+/*-- 左侧列表 --*/
+#sidebar{ float:left;padding:5px; margin-top:0px; min-height:500px;}
+.accordion, .accordion ul, .accordion li, .accordion a{margin:0;padding:0;border:none; outline:none; font-size:14px; }
+.accordion li{list-style: none;}
+.accordion li > a{display:block;position:relative;padding:0 10px 0 25px; height:28px;line-height:28px;color:#51a869;text-decoration:none;background: url(../bimages/coin03.png) 10px 8px no-repeat;}
+.accordion > li:hover > a, .accordion > li:target > a, .accordion > li > a.active {color:#fff; background:#51a869 url(../bimages/coin03.png) 10px -18px no-repeat;}
+.accordion > li > a:before{position: absolute;top: 0;left: 0;content: '';width: 24px;height: 24px;margin: 4px 8px;}
+.sub-menu li a{color:#333;background:url(../bimages/coin03.png) 20px -44px no-repeat; font-size:12px; padding-left:30px;display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.sub-menu li:hover a{color:#318c6d }
+.accordion li > .sub-menu{display: none;}
+
+
+
+/*-- 内容 --*/
+#mainContent { margin-left:200px !important; margin-left:197px; margin-top:10px;}
+
+
+/*-- 底部 --*/
+#foot{background:#eee;border-top:1px solid #d6d6d6;font-size:12px;color:#808080; line-height:30px; text-align:center}
+
+
+/*---- 翻页 ----*/
+.paginationBox {width:350px;  text-align:center; display:table;font-size:12px;}
+.paginationBox span a{display:inline-block; background:#fff; border: 1px solid #cdcdcd;color:#333;cursor: default;height: 23px;line-height:23px;text-align: center; padding:0 6px;}
+
+
+
+.paginationBox span a:hover,.paginationBox span input a.active {background:#f1a96a; color: #FFFFFF; border:1px solid #f1a96a;}
+
+
+.paginationBox span a:hover,.paginationBox span a.active {background:#f1a96a; color: #FFFFFF; border:1px solid #f1a96a;}
+#lastpage:HOVER {background-color: #F1A96A;}
+#lastpage{height:25px;}
+
+#skip1:HOVER {background-color: #F1A96A;}
+
+#skip1:HOVER {background-color: #F1A96A;} 
+
