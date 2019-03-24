@@ -1,12 +1,9 @@
 package com.initcat.frontend.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.initcat.frontend.common.Constant;
-import com.initcat.frontend.consumer.service.ConsumerTestService;
 import com.initcat.frontend.model.LoginRequest;
 import com.initcat.frontend.model.LoginResponse;
-import com.initcat.frontend.utils.HttpClientUtils;
+import com.initcat.frontend.service.UserLoginService;
+import com.initcat.frontend.service.UserLogoutService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +22,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/login")
 public class LoginController {
 
-	@Autowired
-	ConsumerTestService consumerTestService;
-
 	private static Logger logger = LoggerFactory.getLogger(LoginController.class);
+
+	@Autowired
+	UserLoginService userLoginService;
+	@Autowired
+	UserLogoutService userLogoutService;
+
 
 	@GetMapping(value = "/loginView")
 	public String loginView() {
@@ -38,27 +38,14 @@ public class LoginController {
 
 	@ResponseBody
 	@PostMapping(value = "/doLogin", consumes = "application/json")
-	public String doLogin(@RequestBody LoginRequest loginRequest) {
-		logger.info(" access doLogin");
-		JSONObject json = new JSONObject();
-		json.put("userNumber", loginRequest.getUserNumber());
-		json.put("passward", loginRequest.getPassward());
-		json.put("userType", loginRequest.getUserType());
-		JSONObject jsonObject = HttpClientUtils.httpPost(
-				Constant.HTTP_USER_LOCAL_PREFIX + "/user/login",
-				json.toJSONString());
-		logger.info(" doLogin result:" + jsonObject);
-		// 将登录信息存储到session
-		LoginResponse response = new LoginResponse();
-		response.setLoginStatus(true);
-		response.setMsg("登录成功");
-		return JSON.toJSONString(response);
+	public LoginResponse doLogin(@RequestBody LoginRequest loginRequest) {
+		return userLoginService.login(loginRequest);
 	}
 
-	@GetMapping(value = "/doLogOut")
-	public void doLogOut() {
-		logger.info(" access doLogOut");
-		consumerTestService.consumerTest();
+	@GetMapping(value = "/doLogout")
+	public void doLogout() {
+		logger.info(" access doLogout");
+		userLogoutService.logout();
 	}
 
 }
