@@ -1,5 +1,7 @@
 package com.initcat.user_service.service;
 
+import com.initcat.user_service.model.db.CoinAccountInfo;
+
 import java.util.Map;
 
 
@@ -8,7 +10,7 @@ public interface CoinService {
      * 开户
      * @return
      */
-    Map<Object, Object> openAccount(Long coinBalance, Integer accountStatus);
+    CoinAccountInfo openAccount(Long userId);
 
     /**
      * 充值

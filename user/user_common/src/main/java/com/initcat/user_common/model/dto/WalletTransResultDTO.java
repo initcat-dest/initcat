@@ -14,7 +14,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class walletTransResultDTO {
+public class WalletTransResultDTO {
 
 	/**
 	 * 交易结果
@@ -24,5 +24,4 @@ public class walletTransResultDTO {
 	 * 交易后账户信息
 	 */
 	private WalletAccountInfoDTO walletAccountInfo;
-
 }
