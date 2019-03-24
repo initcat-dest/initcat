@@ -15,5 +15,4 @@ public interface WalletTransRecordRepository extends JpaRepository<WalletTransRe
 
 	WalletTransRecord findByUserId(Long userId);
 
-	WalletTransRecord findByUserIdForUpdate(Long userId);
 }

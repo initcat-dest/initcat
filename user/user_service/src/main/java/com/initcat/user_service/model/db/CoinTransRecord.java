@@ -3,6 +3,7 @@ package com.initcat.user_service.model.db;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
@@ -20,6 +21,7 @@ import java.util.Date;
 public class CoinTransRecord implements Serializable {
 
 	@Id
+	@GeneratedValue
 	private Long id;
 	/**
 	 * 用户ID

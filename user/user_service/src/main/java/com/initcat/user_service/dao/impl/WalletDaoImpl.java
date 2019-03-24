@@ -33,7 +33,7 @@ public class WalletDaoImpl implements WalletDao {
 
 	@Override
 	public WalletAccountInfo findByUserIdForUpdate(Long userId) {
-		return walletAccountInfoRepository.findByUserIdForUpdate(userId);
+		return walletAccountInfoRepository.queryByUserId(userId);
 	}
 
 	@Override
@@ -52,6 +52,11 @@ public class WalletDaoImpl implements WalletDao {
 		walletTransRecordRepository.save(record);
 		// TODO
 		return true;
+	}
+
+	@Override
+	public void saveAccountInfo(WalletAccountInfo accountInfo) {
+		walletAccountInfoRepository.save(accountInfo);
 	}
 
 	@Override

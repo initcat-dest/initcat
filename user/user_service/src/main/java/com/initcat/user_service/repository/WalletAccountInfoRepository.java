@@ -2,6 +2,10 @@ package com.initcat.user_service.repository;
 
 import com.initcat.user_service.model.db.WalletAccountInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Query;
+
+import javax.persistence.LockModeType;
 
 /**
  * 零钱账户Repository
@@ -15,5 +19,7 @@ public interface WalletAccountInfoRepository extends JpaRepository<WalletAccount
 
 	WalletAccountInfo findByUserId(Long userId);
 
-	WalletAccountInfo findByUserIdForUpdate(Long userId);
+	@Lock(value = LockModeType.PESSIMISTIC_WRITE)
+	@Query("SELECT wai FROM WalletAccountInfo wai WHERE wai.userId = ?1")
+	WalletAccountInfo queryByUserId(Long userId);
 }

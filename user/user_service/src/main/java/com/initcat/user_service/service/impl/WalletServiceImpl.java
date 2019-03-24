@@ -9,8 +9,11 @@ import com.initcat.user_service.util.RedisUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+
+import java.util.Date;
 
 import static com.initcat.user_common.model.enums.WalletTransResultEnum.*;
 
@@ -22,6 +25,8 @@ import static com.initcat.user_common.model.enums.WalletTransResultEnum.*;
  * @company xmiles
  * @date 2019/3/24
  */
+@Service
+@com.alibaba.dubbo.config.annotation.Service
 public class WalletServiceImpl implements WalletService {
 
 	private static Logger logger = LoggerFactory.getLogger(WalletServiceImpl.class);
@@ -31,7 +36,18 @@ public class WalletServiceImpl implements WalletService {
 
 	@Override
 	public WalletAccountInfo openAccount(Long userId) {
-		return null;
+		if (userId == null) {
+			return null;
+		}
+		WalletAccountInfo accountInfo = new WalletAccountInfo();
+		accountInfo.setUserId(userId);
+		accountInfo.setAccountStatus(1);
+		accountInfo.setWalletBalance(0);
+		accountInfo.setCreateTime(new Date());
+		if (RedisUtils.setnxex("wallet:openAccount:" + userId, "1", 3)) {
+			walletDao.saveAccountInfo(accountInfo);
+		}
+		return accountInfo;
 	}
 
 	@Override
