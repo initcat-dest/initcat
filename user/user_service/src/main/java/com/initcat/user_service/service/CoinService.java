@@ -1,5 +1,6 @@
 package com.initcat.user_service.service;
 
+import com.initcat.user_common.model.dto.WalletTransResultDTO;
 import com.initcat.user_service.model.db.CoinAccountInfo;
 
 import java.util.Map;
@@ -15,8 +16,8 @@ public interface CoinService {
     /**
      * 充值
      */
-    Map<Object, Object> recharge(Integer coinBalance,Integer accountStatus,Integer operateCoin,
-                                 Integer tradeCoin);
+    WalletTransResultDTO recharge(Long userId, int coinBalance, int accountStatus, int operateCoin,
+                                  int tradeCode, String transMsg, Long businessId);
 
     /**
      * 消费

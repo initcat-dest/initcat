@@ -45,6 +45,10 @@ public class CoinTransRecord implements Serializable {
 	 */
 	private Integer operateType;
 	/**
+	 * 业务ID
+	 */
+	private Long businessId;
+	/**
 	 * 交易余额
 	 */
 	private Integer tradeCoin;
