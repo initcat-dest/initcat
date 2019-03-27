@@ -49,7 +49,7 @@ public class CoinTransRecord implements Serializable {
 	 */
 	private Long businessId;
 	/**
-	 * 交易余额
+	 * 交易后余额
 	 */
 	private Integer tradeCoin;
 	/**
