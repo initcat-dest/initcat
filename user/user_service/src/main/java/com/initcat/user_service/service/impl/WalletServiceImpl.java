@@ -102,7 +102,53 @@ public class WalletServiceImpl implements WalletService {
 	}
 
 	@Override
+	@Transactional
 	public WalletTransResultDTO consume(Long userId, int transCode, String transMsg, int consumeMoney, Long businessId) {
-		return null;
+		try {
+			//校验参数
+			if (userId == null || consumeMoney <= 0 || transCode <= 0) {
+				return WalletTransResultDTO.builder().transResult(PARAMETER_ILLEGAL).build();
+			}
+			//加缓存锁
+			String redisLockKey = "wallet:recharge" + userId + ":" + transCode + ":" + businessId;
+			if (!RedisUtils.setnxex(redisLockKey, "1", 5)) {
+				return WalletTransResultDTO.builder().transResult(REPEAT_REQUEST).build();
+			}
+			/**
+			 * 用锁的形势获取用户信息，并判断用户是否存在与校验用户状态
+			 */
+			WalletAccountInfo accountInfo = walletDao.findByUserIdForUpdate(userId);
+			if (accountInfo == null) {
+				//如果用户不存在，重新开户，并加锁
+				openAccount(userId);
+				accountInfo = walletDao.findByUserIdForUpdate(userId);
+			}
+			//验证用户状态
+			if (accountInfo == null || accountInfo.getAccountStatus() != 1) {
+				return WalletTransResultDTO.builder().transResult(ACCOUNT_ILLEGAL).build();
+			}
+			//判断消费金额是否大于余额
+			if (accountInfo.getWalletBalance() < consumeMoney) {
+				return WalletTransResultDTO.builder().transResult(LACK_BALANCE).build();
+			}
+			Integer tradeMoney = accountInfo.getWalletBalance() - consumeMoney;
+			//添加金币消费记录
+			Boolean saveStatus = walletDao.saveTransRecord(userId, consumeMoney, transCode, 2, transMsg, businessId, tradeMoney);
+			if (!saveStatus) {
+				//保存失败，直接返回
+				return WalletTransResultDTO.builder().transResult(SAVE_RECORD_ERROR).build();
+			}
+			//添加消费记录，更新金币余额
+			accountInfo.setWalletBalance(tradeMoney);
+			walletDao.updateAccountInfo(accountInfo);
+			WalletAccountInfoDTO walletAccountInfoDTO = WalletAccountInfoDTO.builder().userId(userId).walletBalance(tradeMoney).build();
+			return WalletTransResultDTO.builder().transResult(SUCCESS).walletAccountInfo(walletAccountInfoDTO).build();
+		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			logger.error("walletRechange error userid:" + userId + ", transCode:" + transCode
+					+ ", rechargeMoney:" + consumeMoney, e);
+			return WalletTransResultDTO.builder().transResult(SERVICE_ERROR).build();
+		}
+
 	}
 }

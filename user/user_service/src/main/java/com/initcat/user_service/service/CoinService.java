@@ -1,9 +1,6 @@
 package com.initcat.user_service.service;
 
 import com.initcat.user_common.model.dto.CoinTransRecordDTO;
-import com.initcat.user_service.model.db.CoinAccountInfo;
-
-import java.util.Map;
 
 
 public interface CoinService {
@@ -11,17 +8,17 @@ public interface CoinService {
      * 开户
      * @return
      */
-    CoinAccountInfo openAccount(Long userId);
+    CoinTransRecordDTO openAccount(Long userId);
 
     /**
      * 充值
      */
-    CoinTransRecordDTO recharge(Long userId, int coinBalance, int accountStatus, int operateCoin,
-                                int tradeCode, String transMsg, Long businessId);
+    CoinTransRecordDTO recharge(Long userId, int accountStatus, int operateCoin,
+                                int transCode, String transMsg, Long businessId);
 
     /**
      * 消费
      */
-    Map<Object, Object> consume(Integer coinBalance,Integer accountStatus,Integer operateCoin,
-                                Integer transCode,String transMsg, Integer tradeCoin);
+    CoinTransRecordDTO consume(Long userId,int accountStatus,int operateCoin,
+                                int transCode,String transMsg,Long businessId);
 }

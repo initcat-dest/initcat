@@ -33,6 +33,11 @@ public class UserServiceImpl implements UserService {
         // TODO 自动生成用户数据
         // TODO Redis HyperLogLog 统计
         try {
+            //使用公共组件校验入参
+            if (loginReq.getPhone() == null || loginReq.getPassward() == null) {
+                return LoginResp.builder().loginStatusEnum(LOGIN_FAIL).build();
+            }
+
             logger.info(">>>>>login start:" + (loginReq != null ? loginReq.toString() : "null"));
             CommUser commUser = userDao.findByPhone(loginReq.getPhone());
             CommUserDTO commUserDTO = new CommUserDTO();

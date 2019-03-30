@@ -20,7 +20,15 @@ public enum LoginStatusEnum implements Serializable {
 	 * 登录失败
 	 * TODO 详细拆分失败类型
 	 */
-	LOGIN_FAIL(4001, "登录失败");
+	LOGIN_FAIL(4001, "登录失败"),
+	/**
+	 * 用户名不存在
+	 */
+	INVALID_PHONE(4002, "手机号不存在"),
+	/**
+	 * 密码错误
+	 */
+	LOGIN_ERROR_PASSWORD(4003,"密码错误");
 
 	public int code;
 	public String msg;

@@ -1,7 +1,9 @@
 package com.initcat.user_service.dao;
 
 import com.initcat.user_service.model.db.CoinAccountInfo;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface CoinDao {
     /**
      * 开户

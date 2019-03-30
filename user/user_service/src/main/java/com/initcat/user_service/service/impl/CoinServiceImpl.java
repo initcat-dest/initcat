@@ -4,7 +4,6 @@ import com.initcat.user_common.model.dto.CoinAccountInfoDTO;
 import com.initcat.user_common.model.dto.CoinTransRecordDTO;
 import com.initcat.user_service.dao.CoinDao;
 import com.initcat.user_service.model.db.CoinAccountInfo;
-import com.initcat.user_service.repository.CoinRepository;
 import com.initcat.user_service.service.CoinService;
 import com.initcat.user_service.util.RedisUtils;
 import org.slf4j.Logger;
@@ -15,8 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.initcat.user_common.model.enums.CointransRecordEnum.*;
 
@@ -26,44 +23,44 @@ public class CoinServiceImpl implements CoinService {
     private static Logger logger = LoggerFactory.getLogger(CoinServiceImpl.class);
 
     @Autowired
-    CoinRepository coinRepository;
-    @Autowired
     CoinDao coinDao;
 
     /**
      * 开户
      */
     @Override
-    public CoinAccountInfo openAccount(Long userId) {
-        if (userId==null) {
+    public CoinTransRecordDTO openAccount(Long userId) {
+        if (userId == null) {
             return null;
         }
         CoinAccountInfo accountInfo = new CoinAccountInfo();
         accountInfo.setUserId(userId);
         accountInfo.setAccountStatus(1);
         accountInfo.setCoinBalance(0);
+        if (accountInfo.getUserId() == null || accountInfo.getAccountStatus() != 1) {
+            return CoinTransRecordDTO.builder().transResult(PARAMETER_ILLEGAL).build();
+        }
         accountInfo.setCreateTime(new Date());
-        return coinRepository.save(accountInfo);
+        coinDao.saveAccountInfo(accountInfo);
+        return CoinTransRecordDTO.builder().transResult(SUCCESS).build();
     }
-
     /**
      * 充值
-     * @param coinBalance
      * @param accountStatus
      * @param operateCoin
      * @return
      */
     @Override
     @Transactional
-    public CoinTransRecordDTO recharge(Long userId, int coinBalance, int accountStatus, int operateCoin,
-                                       int tradeCode, String transMsg, Long businessId) {
+    public CoinTransRecordDTO recharge(Long userId, int accountStatus, int operateCoin,
+                                       int transCode, String transMsg, Long businessId) {
         try {
             //校验参数
-            if (userId==null|| operateCoin<=0||tradeCode<=0){
+            if (userId==null|| operateCoin<=0||transCode<=0){
                 return CoinTransRecordDTO.builder().transResult(PARAMETER_ILLEGAL).build();
             }
             //根据消费类型和业务ID进行缓存锁
-            String redisLockKey="coin:recharge:"+userId+":"+tradeCode+":"+businessId;
+            String redisLockKey="coin:recharge:"+userId+":"+transCode+":"+businessId;
             if (!RedisUtils.setnxex(redisLockKey,"1",5)) {
                 return  CoinTransRecordDTO.builder().transResult(REPEAT_REQUEST).build();
             }
@@ -82,7 +79,7 @@ public class CoinServiceImpl implements CoinService {
            Integer  tradeCoin=accountInfo.getCoinBalance()+operateCoin;
 
             // 添加金币充值记录
-            boolean saveStatus=coinDao.saveTransRecord(userId, operateCoin, tradeCode, 1, transMsg, businessId, tradeCoin);
+            boolean saveStatus=coinDao.saveTransRecord(userId, operateCoin, transCode, 1, transMsg, businessId, tradeCoin);
             if (!saveStatus) {
                 //保存交易记录失败，直接返回
                 return CoinTransRecordDTO.builder().transResult(SAVE_RECORD_ERROR).build();
@@ -95,7 +92,7 @@ public class CoinServiceImpl implements CoinService {
         } catch (Exception e) {
             //手动回滚事物
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            logger.error("walletRechange error userid:"+userId+",transCode:"+tradeCode+
+            logger.error("coinRechange error userid:"+userId+",transCode:"+transCode+
                    ",operateCoin:"+operateCoin,e);
          return CoinTransRecordDTO.builder().transResult(SERVICE_ERROR).build();
         }
@@ -103,24 +100,68 @@ public class CoinServiceImpl implements CoinService {
 
     /**
      * 消费
-     * @param coinBalance
      * @param accountStatus
      * @param operateCoin
      * @param transCode
      * @param transMsg
-     * @param tradeCoin
      * @return
      */
     @Override
-    public Map<Object, Object> consume(Integer coinBalance, Integer accountStatus, Integer operateCoin,
-                                       Integer transCode, String transMsg, Integer tradeCoin) {
-        if (operateCoin > coinBalance) {
-            throw new IllegalArgumentException("金币不足，请充值");
+    @Transactional
+    public CoinTransRecordDTO consume(Long userId,int accountStatus,int operateCoin,
+                                      int transCode,String transMsg,Long businessId) {
+
+        try {
+            /**
+             * 校验参数是否合法
+             */
+            if (userId == null || operateCoin <= 0 || transCode <= 0) {
+                return CoinTransRecordDTO.builder().transResult(PARAMETER_ILLEGAL).build();
+            }
+            /**
+             *根据业务id和消费类型加缓存锁
+             */
+            String redisLockKey = "coin:" + userId + ":" + transCode + "：" + businessId;
+            if (!RedisUtils.setnxex(redisLockKey, "1", 5)) {
+                return CoinTransRecordDTO.builder().transResult(REPEAT_REQUEST).build();
+            }
+            /**
+             * 检查用户状态与用户余额，并校验用户状态
+             */
+            CoinAccountInfo coinAccountInfo = coinDao.findByUserIdForUpdate(userId);
+            //如果不存在，用户开户，在加锁
+            if (coinAccountInfo == null) {
+                openAccount(userId);
+                coinAccountInfo = coinDao.findByUserIdForUpdate(userId);
+            }
+            //校验用户状态
+            if (coinAccountInfo == null || coinAccountInfo.getAccountStatus() != 1) {
+                return CoinTransRecordDTO.builder().transResult(ACCOUNT_ILLEGAL).build();
+            }
+            //校验消费金额是否大于余额
+            if (operateCoin > coinAccountInfo.getCoinBalance()) {
+                return CoinTransRecordDTO.builder().transResult(LACK_BALANCE).build();
+            }
+            //交易后余额
+            Integer tradeCoin = coinAccountInfo.getCoinBalance() - operateCoin;
+            //添加金币消费记录
+            Boolean saveStatus = coinDao.saveTransRecord(userId, operateCoin, transCode, 2, transMsg, businessId, tradeCoin);
+            if (!saveStatus) {
+                //如果交易失败，直接返回
+                return CoinTransRecordDTO.builder().transResult(SAVE_RECORD_ERROR).build();
+            }
+            //更新金币消费金额
+            coinAccountInfo.setCoinBalance(tradeCoin);
+            coinDao.updateAccountInfo(coinAccountInfo);
+            CoinAccountInfoDTO accountInfoDTO = CoinAccountInfoDTO.builder().userId(userId).coinBalance(tradeCoin).build();
+            return CoinTransRecordDTO.builder().transResult(SUCCESS).build();
+        } catch (Exception e) {
+            //手动回滚
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            logger.error("coinRechange error userid:"+userId+",transCode:"+transCode+
+                    ",operateCoin:"+operateCoin,e);
+            return CoinTransRecordDTO.builder().transResult(SERVICE_ERROR).build();
         }
-        tradeCoin=coinBalance-operateCoin;
-        Map<Object,Object> map=new HashMap<>();
-        map.put("tradeCoin", tradeCoin);
-        return map;
     }
 
 }
