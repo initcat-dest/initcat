@@ -23,9 +23,9 @@ public class CoinAccountInfo implements Serializable {
     /**
      * 金币余额
      */
-    private Integer coinBalance;//'金币余额
+    private Integer coinBalance;
     /**
-     * 金币账户状态 1：有效 ，非1：无效'
+     * 金币账户状态 1：有效 ，非1：无效
      */
     private Integer accountStatus;
     /**

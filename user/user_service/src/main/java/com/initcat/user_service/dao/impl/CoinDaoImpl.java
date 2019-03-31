@@ -8,6 +8,8 @@ import com.initcat.user_service.repository.CoinTransRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
+
 @Repository
 public class CoinDaoImpl implements CoinDao {
 
@@ -38,15 +40,16 @@ public class CoinDaoImpl implements CoinDao {
 
     @Override
     public boolean saveTransRecord(Long userId, int operateCoin, int transCode, int operateType, String transMsg, Long businessId, int tradeCoin) {
-        CoinTransRecord coinTransRecord= new CoinTransRecord();
+        CoinTransRecord coinTransRecord = new CoinTransRecord();
         coinTransRecord.setUserId(userId);
         coinTransRecord.setOperateCoin(operateCoin);
         coinTransRecord.setTransCode(transCode);
         coinTransRecord.setOperateType(operateType);
         coinTransRecord.setTransMsg(transMsg);
+        coinTransRecord.setCreateTime(new Date());
         coinTransRecord.setBusinessId(businessId);
         coinTransRecord.setTradeCoin(tradeCoin);
         coinTransRecordRepository.save(coinTransRecord);
-        return false;
+        return coinTransRecord.getId() != null && coinTransRecord.getId() > 0;
     }
 }

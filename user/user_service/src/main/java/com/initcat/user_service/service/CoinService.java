@@ -1,6 +1,8 @@
 package com.initcat.user_service.service;
 
-import com.initcat.user_common.model.dto.CoinTransRecordDTO;
+import com.initcat.user_common.model.dto.CoinTransResultDTO;
+import com.initcat.user_common.model.req.CoinConsumeReq;
+import com.initcat.user_common.model.req.CoinRechargeReq;
 
 
 public interface CoinService {
@@ -8,17 +10,15 @@ public interface CoinService {
      * 开户
      * @return
      */
-    CoinTransRecordDTO openAccount(Long userId);
+    CoinTransResultDTO openAccount(Long userId);
 
     /**
      * 充值
      */
-    CoinTransRecordDTO recharge(Long userId, int accountStatus, int operateCoin,
-                                int transCode, String transMsg, Long businessId);
+    CoinTransResultDTO recharge(CoinRechargeReq coinRechargeReq);
 
     /**
      * 消费
      */
-    CoinTransRecordDTO consume(Long userId,int accountStatus,int operateCoin,
-                                int transCode,String transMsg,Long businessId);
+    CoinTransResultDTO consume(CoinConsumeReq coinConsumeReq);
 }

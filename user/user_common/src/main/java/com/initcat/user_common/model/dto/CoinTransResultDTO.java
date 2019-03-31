@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CoinTransRecordDTO {
+public class CoinTransResultDTO {
     /**
      * 交易结果
      */
