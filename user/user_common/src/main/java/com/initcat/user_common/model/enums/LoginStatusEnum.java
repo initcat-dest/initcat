@@ -18,7 +18,6 @@ public enum LoginStatusEnum implements Serializable {
 	LOGIN_SUCCESS(1000, "登录成功"),
 	/**
 	 * 登录失败
-	 * TODO 详细拆分失败类型
 	 */
 	LOGIN_FAIL(4001, "登录失败"),
 	/**
