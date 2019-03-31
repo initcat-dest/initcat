@@ -6,6 +6,8 @@ import com.initcat.user_service.model.db.WalletTransRecord;
 import com.initcat.user_service.repository.WalletAccountInfoRepository;
 import com.initcat.user_service.repository.WalletTransRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -33,12 +35,12 @@ public class WalletDaoImpl implements WalletDao {
 
 	@Override
 	public WalletAccountInfo findByUserIdForUpdate(Long userId) {
-		return walletAccountInfoRepository.queryByUserId(userId);
+		return walletAccountInfoRepository.findByUserId(userId);
 	}
 
 	@Override
 	public boolean saveTransRecord(Long userId, int operateMoney, int transCode,
-								   int operateType,  String transMsg, Long businessId, int tradeMoney) {
+								   int operateType, String transMsg, Long businessId, int tradeMoney) {
 		WalletTransRecord record = new WalletTransRecord();
 		record.setUserId(userId);
 		record.setTransMoney(operateMoney);
@@ -51,6 +53,11 @@ public class WalletDaoImpl implements WalletDao {
 
 		walletTransRecordRepository.save(record);
 		return record.getId() > 0;
+	}
+
+	@Override
+	public Page<WalletTransRecord> listTransRecord(Long userId, int pageNum, int pageSize) {
+		return walletTransRecordRepository.findByUserId(userId, new PageRequest(pageNum, pageSize));
 	}
 
 	@Override

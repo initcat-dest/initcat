@@ -41,4 +41,13 @@ public class WalletController {
 		return consumeResp;
 	}
 
+//	@PostMapping("/consume")
+//	@ResponseBody
+//	public WalletConsumeResp listTransRecord(@RequestBody WalletConsumeReq consumeReq) {
+//		WalletTransResultDTO consumeResult = walletService.listTransRecord(consumeReq);
+//		WalletConsumeResp consumeResp = new WalletConsumeResp();
+//		consumeResp.setConsumeResult(consumeResult);
+//		return consumeResp;
+//	}
+
 }

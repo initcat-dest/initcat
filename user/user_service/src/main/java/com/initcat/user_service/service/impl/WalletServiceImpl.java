@@ -7,10 +7,12 @@ import com.initcat.user_common.model.req.WalletRechargeReq;
 import com.initcat.user_common.service.WalletService;
 import com.initcat.user_service.dao.WalletDao;
 import com.initcat.user_service.model.db.WalletAccountInfo;
+import com.initcat.user_service.model.db.WalletTransRecord;
 import com.initcat.user_service.util.RedisUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -76,7 +78,7 @@ public class WalletServiceImpl implements WalletService {
 			if (userId == null || rechargeMoney <= 0 || transCode <= 0) {
 				return WalletTransResultDTO.builder().transResult(PARAMETER_ILLEGAL).build();
 			}
-			// 根据消费类型和业务ID进行缓存锁
+			// 根据充值类型和业务ID进行缓存锁
 			String redisLockKey = "wallet:recharge:" + userId + ":" + transCode + ":" + businessId;
 			if (!RedisUtils.setnxex(redisLockKey, "1", 5)) {
 				return WalletTransResultDTO.builder().transResult(REPEAT_REQUEST).build();
@@ -135,10 +137,11 @@ public class WalletServiceImpl implements WalletService {
 				return WalletTransResultDTO.builder().transResult(PARAMETER_ILLEGAL).build();
 			}
 			// 加缓存锁
-			String redisLockKey = "wallet:recharge" + userId + ":" + transCode + ":" + businessId;
+			String redisLockKey = "wallet:consume" + userId + ":" + transCode + ":" + businessId;
 			if (!RedisUtils.setnxex(redisLockKey, "1", 5)) {
 				return WalletTransResultDTO.builder().transResult(REPEAT_REQUEST).build();
 			}
+
 			// 用锁的形势获取用户信息，并判断用户是否存在与校验用户状态
 			WalletAccountInfo accountInfo = walletDao.findByUserIdForUpdate(userId);
 
@@ -169,6 +172,14 @@ public class WalletServiceImpl implements WalletService {
 					+ ", consumeMoney:" + consumeMoney, e);
 			return WalletTransResultDTO.builder().transResult(SERVICE_ERROR).build();
 		}
-
 	}
+
+	@Override
+	public void listTransRecord(Long userId, int pageNum, int pageSize) {
+		Page<WalletTransRecord> walletTransRecords = walletDao.listTransRecord(userId, pageNum, pageSize);
+		for (WalletTransRecord walletTransRecord : walletTransRecords) {
+			System.out.println(walletTransRecord.getId());
+		}
+	}
+
 }

@@ -1,6 +1,8 @@
 package com.initcat.user_service.dao;
 
 import com.initcat.user_service.model.db.WalletAccountInfo;
+import com.initcat.user_service.model.db.WalletTransRecord;
+import org.springframework.data.domain.Page;
 
 /**
  * 零钱Dao
@@ -48,5 +50,11 @@ public interface WalletDao {
 	boolean saveTransRecord(Long userId, int operateMoney, int transCode,
 							int operateType, String transMsg, Long businessId, int tradeMoney);
 
+
+	/**
+	 * 获取交易记录
+	 * @param userId 用户ID
+	 */
+	Page<WalletTransRecord> listTransRecord(Long userId, int pageNum, int pageSize);
 
 }

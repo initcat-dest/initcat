@@ -1,7 +1,10 @@
 package com.initcat.user_service.repository;
 
 import com.initcat.user_service.model.db.WalletTransRecord;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * 零钱交易记录Repository
@@ -13,6 +16,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface WalletTransRecordRepository extends JpaRepository<WalletTransRecord, Long> {
 
-	WalletTransRecord findByUserId(Long userId);
+	@Query(value = "SELECT * FROM WalletTransRecord WHERE userId = ?1",
+			countQuery = "SELECT count(*) FROM WalletTransRecord WHERE userId = ?1",
+			nativeQuery = true)
+	Page<WalletTransRecord> findByUserId(Long userID, Pageable pageable);
 
 }

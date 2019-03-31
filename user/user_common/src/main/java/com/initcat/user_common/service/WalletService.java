@@ -32,8 +32,17 @@ public interface WalletService {
 
 	/**
 	 * 零钱消费
+	 *
 	 * @param consumeReq 零钱消费请求对象
 	 * @return walletTransResultDTO
 	 */
 	WalletTransResultDTO consume(WalletConsumeReq consumeReq);
+
+	/**
+	 * @param userId
+	 * @param pageNum
+	 * @param pageSize
+	 * @return
+	 */
+	void listTransRecord(Long userId, int pageNum, int pageSize);
 }
