@@ -1,9 +1,9 @@
-package com.initcat.user_service.service;
+package com.initcat.user_common.service;
 
+import com.initcat.user_common.model.dto.WalletAccountInfoDTO;
 import com.initcat.user_common.model.dto.WalletTransResultDTO;
 import com.initcat.user_common.model.req.WalletConsumeReq;
 import com.initcat.user_common.model.req.WalletRechargeReq;
-import com.initcat.user_service.model.db.WalletAccountInfo;
 
 /**
  * 零钱账户service
@@ -20,7 +20,7 @@ public interface WalletService {
 	 *
 	 * @return 账户信息
 	 */
-	WalletAccountInfo openAccount(Long userId);
+	WalletAccountInfoDTO openAccountForView(Long userId);
 
 	/**
 	 * 零钱充值

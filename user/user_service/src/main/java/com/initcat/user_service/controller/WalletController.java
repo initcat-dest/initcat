@@ -5,7 +5,7 @@ import com.initcat.user_common.model.req.WalletConsumeReq;
 import com.initcat.user_common.model.req.WalletRechargeReq;
 import com.initcat.user_common.model.resp.WalletConsumeResp;
 import com.initcat.user_common.model.resp.WalletRechargeResp;
-import com.initcat.user_service.service.WalletService;
+import com.initcat.user_common.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +24,7 @@ public class WalletController {
 	@Autowired
 	WalletService walletService;
 
-	@PostMapping("/recharge")
+	@PostMapping("recharge")
 	public WalletRechargeResp recharge(@RequestBody WalletRechargeReq rechargeReq) {
 		WalletTransResultDTO rechargeResult = walletService.recharge(rechargeReq);
 		WalletRechargeResp rechargeResp = new WalletRechargeResp();

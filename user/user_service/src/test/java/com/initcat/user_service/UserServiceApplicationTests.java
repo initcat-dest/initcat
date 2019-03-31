@@ -1,6 +1,6 @@
 package com.initcat.user_service;
 
-import com.initcat.user_service.service.WalletService;
+import com.initcat.user_common.service.WalletService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

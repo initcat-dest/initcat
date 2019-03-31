@@ -13,5 +13,7 @@ import lombok.Data;
  */
 @Data
 public class WalletRechargeResp {
+
 	WalletTransResultDTO rechargeResult;
+
 }

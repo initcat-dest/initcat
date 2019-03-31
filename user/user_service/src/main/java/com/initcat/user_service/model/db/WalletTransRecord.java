@@ -28,10 +28,6 @@ public class WalletTransRecord implements Serializable {
 	 */
 	private Long userId;
 	/**
-	 * 操作金额（单位：分）
-	 */
-	private Integer operateMoney;
-	/**
 	 * 操作类型 1：充值 ，2：消费
 	 */
 	private Integer operateType;
@@ -39,6 +35,10 @@ public class WalletTransRecord implements Serializable {
 	 * 交易余额（单位：分）
 	 */
 	private Integer transMoney;
+	/**
+	 * 交易完成后余额（单位：分）
+	 */
+	private Integer tradeMoney;
 	/**
 	 * 交易码
 	 */

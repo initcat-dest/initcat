@@ -4,9 +4,9 @@ import com.initcat.user_common.model.dto.WalletAccountInfoDTO;
 import com.initcat.user_common.model.dto.WalletTransResultDTO;
 import com.initcat.user_common.model.req.WalletConsumeReq;
 import com.initcat.user_common.model.req.WalletRechargeReq;
+import com.initcat.user_common.service.WalletService;
 import com.initcat.user_service.dao.WalletDao;
 import com.initcat.user_service.model.db.WalletAccountInfo;
-import com.initcat.user_service.service.WalletService;
 import com.initcat.user_service.util.RedisUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,16 @@ public class WalletServiceImpl implements WalletService {
 	WalletDao walletDao;
 
 	@Override
-	public WalletAccountInfo openAccount(Long userId) {
+	public WalletAccountInfoDTO openAccountForView(Long userId) {
+		WalletAccountInfo walletAccountInfo = openAccount(userId);
+		int walletBalance = walletAccountInfo != null
+				? walletAccountInfo.getWalletBalance()
+				: 0;
+		return WalletAccountInfoDTO.builder()
+				.userId(userId).walletBalance(walletBalance).build();
+	}
+
+	private WalletAccountInfo openAccount(Long userId) {
 		if (userId == null) {
 			return null;
 		}
