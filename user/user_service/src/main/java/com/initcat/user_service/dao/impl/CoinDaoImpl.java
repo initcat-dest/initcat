@@ -23,7 +23,7 @@ public class CoinDaoImpl implements CoinDao {
 
     @Override
     public void updateAccountInfo(CoinAccountInfo coinAccountInfo) {
-        coinAccountInfoRepository.updateByUserId(coinAccountInfo.getUserId());
+        coinAccountInfoRepository.updateByUserId(coinAccountInfo);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class CoinDaoImpl implements CoinDao {
 
     @Override
     public CoinAccountInfo findByUserIdForUpdate(Long userId) {
-        return coinAccountInfoRepository.findByUserIdForUpdate(userId);
+        return coinAccountInfoRepository.queryByUserId(userId);
     }
 
     @Override
