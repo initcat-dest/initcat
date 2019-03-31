@@ -1,13 +1,17 @@
 package com.initcat.user_service.controller;
 
+import com.initcat.user_common.model.dto.WalletTransRecordDTO;
 import com.initcat.user_common.model.dto.WalletTransResultDTO;
 import com.initcat.user_common.model.req.WalletConsumeReq;
 import com.initcat.user_common.model.req.WalletRechargeReq;
 import com.initcat.user_common.model.resp.WalletConsumeResp;
+import com.initcat.user_common.model.resp.WalletListTransRecordResp;
 import com.initcat.user_common.model.resp.WalletRechargeResp;
 import com.initcat.user_common.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 零钱账户Controller
@@ -41,13 +45,14 @@ public class WalletController {
 		return consumeResp;
 	}
 
-//	@PostMapping("/consume")
-//	@ResponseBody
-//	public WalletConsumeResp listTransRecord(@RequestBody WalletConsumeReq consumeReq) {
-//		WalletTransResultDTO consumeResult = walletService.listTransRecord(consumeReq);
-//		WalletConsumeResp consumeResp = new WalletConsumeResp();
-//		consumeResp.setConsumeResult(consumeResult);
-//		return consumeResp;
-//	}
+	@GetMapping("/transList")
+	public WalletListTransRecordResp listTransRecord(@RequestParam("userId") Long userId,
+													 @RequestParam("pageNum") int pageNum,
+													 @RequestParam("pageSize") int pageSize) {
+		List<WalletTransRecordDTO> walletTransRecordDTOS = walletService.listTransRecord(userId, pageNum, pageSize);
+		WalletListTransRecordResp recordResp = new WalletListTransRecordResp();
+		recordResp.setTransRecords(walletTransRecordDTOS);
+		return recordResp;
+	}
 
 }

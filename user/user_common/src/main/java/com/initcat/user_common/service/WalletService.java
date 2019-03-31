@@ -1,9 +1,12 @@
 package com.initcat.user_common.service;
 
 import com.initcat.user_common.model.dto.WalletAccountInfoDTO;
+import com.initcat.user_common.model.dto.WalletTransRecordDTO;
 import com.initcat.user_common.model.dto.WalletTransResultDTO;
 import com.initcat.user_common.model.req.WalletConsumeReq;
 import com.initcat.user_common.model.req.WalletRechargeReq;
+
+import java.util.List;
 
 /**
  * 零钱账户service
@@ -44,5 +47,5 @@ public interface WalletService {
 	 * @param pageSize
 	 * @return
 	 */
-	void listTransRecord(Long userId, int pageNum, int pageSize);
+	List<WalletTransRecordDTO> listTransRecord(Long userId, int pageNum, int pageSize);
 }

@@ -1,6 +1,7 @@
 package com.initcat.user_service.service.impl;
 
 import com.initcat.user_common.model.dto.WalletAccountInfoDTO;
+import com.initcat.user_common.model.dto.WalletTransRecordDTO;
 import com.initcat.user_common.model.dto.WalletTransResultDTO;
 import com.initcat.user_common.model.req.WalletConsumeReq;
 import com.initcat.user_common.model.req.WalletRechargeReq;
@@ -11,13 +12,16 @@ import com.initcat.user_service.model.db.WalletTransRecord;
 import com.initcat.user_service.util.RedisUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static com.initcat.user_common.model.enums.WalletTransResultEnum.*;
 
@@ -175,11 +179,17 @@ public class WalletServiceImpl implements WalletService {
 	}
 
 	@Override
-	public void listTransRecord(Long userId, int pageNum, int pageSize) {
+	public List<WalletTransRecordDTO> listTransRecord(Long userId, int pageNum, int pageSize) {
 		Page<WalletTransRecord> walletTransRecords = walletDao.listTransRecord(userId, pageNum, pageSize);
-		for (WalletTransRecord walletTransRecord : walletTransRecords) {
-			System.out.println(walletTransRecord.getId());
+		List<WalletTransRecord> content = walletTransRecords.getContent();
+		List<WalletTransRecordDTO> walletTransRecordDTOS = new ArrayList<>();
+		WalletTransRecordDTO walletTransRecordDTO;
+		for (WalletTransRecord record : content) {
+			walletTransRecordDTO = new WalletTransRecordDTO();
+			BeanUtils.copyProperties(record, walletTransRecordDTO);
+			walletTransRecordDTOS.add(walletTransRecordDTO);
 		}
+		return walletTransRecordDTOS;
 	}
 
 }

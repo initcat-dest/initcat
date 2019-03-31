@@ -16,9 +16,9 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface WalletTransRecordRepository extends JpaRepository<WalletTransRecord, Long> {
 
-	@Query(value = "SELECT * FROM WalletTransRecord WHERE userId = ?1",
-			countQuery = "SELECT count(*) FROM WalletTransRecord WHERE userId = ?1",
+	@Query(value = "SELECT * FROM wallet_trans_record WHERE user_id = ?1",
+			countQuery = "SELECT count(*) FROM wallet_trans_record WHERE user_id = ?1",
 			nativeQuery = true)
-	Page<WalletTransRecord> findByUserId(Long userID, Pageable pageable);
+	Page<WalletTransRecord> findAllByUserId(Long userID, Pageable pageable);
 
 }

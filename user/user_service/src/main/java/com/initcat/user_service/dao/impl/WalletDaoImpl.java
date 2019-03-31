@@ -57,7 +57,7 @@ public class WalletDaoImpl implements WalletDao {
 
 	@Override
 	public Page<WalletTransRecord> listTransRecord(Long userId, int pageNum, int pageSize) {
-		return walletTransRecordRepository.findByUserId(userId, new PageRequest(pageNum, pageSize));
+		return walletTransRecordRepository.findAllByUserId(userId, new PageRequest(pageNum, pageSize));
 	}
 
 	@Override
