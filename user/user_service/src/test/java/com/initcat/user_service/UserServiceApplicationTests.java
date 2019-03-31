@@ -20,6 +20,7 @@ public class UserServiceApplicationTests {
 
 	@Test
 	public void WalletServiceTest(){
-		walletService.recharge(3L, 1001, "测试", 100, 9999L);
+
+		// walletService.recharge(3L, 1001, "测试", 100, 9999L);
 	}
 }
