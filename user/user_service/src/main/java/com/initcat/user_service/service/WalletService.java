@@ -1,6 +1,8 @@
 package com.initcat.user_service.service;
 
 import com.initcat.user_common.model.dto.WalletTransResultDTO;
+import com.initcat.user_common.model.req.WalletConsumeReq;
+import com.initcat.user_common.model.req.WalletRechargeReq;
 import com.initcat.user_service.model.db.WalletAccountInfo;
 
 /**
@@ -23,24 +25,15 @@ public interface WalletService {
 	/**
 	 * 零钱充值
 	 *
-	 * @param userId        用户ID
-	 * @param transCode     交易码
-	 * @param transMsg      交易描述
-	 * @param rechargeMoney 交易金额（单位：分）
-	 * @pram businessId    业务ID
+	 * @param rechargeReq 零钱充值请求对象
 	 * @return walletTransResultDTO
 	 */
-	WalletTransResultDTO recharge(Long userId, int transCode, String transMsg, int rechargeMoney, Long businessId);
+	WalletTransResultDTO recharge(WalletRechargeReq rechargeReq);
 
 	/**
 	 * 零钱消费
-	 *
-	 * @param userId       用户ID
-	 * @param transCode    交易码
-	 * @param transMsg     交易描述
-	 * @param consumeMoney 消费金额（单位：分）
-	 * @param businessId   业务ID
+	 * @param consumeReq 零钱消费请求对象
 	 * @return walletTransResultDTO
 	 */
-	WalletTransResultDTO consume(Long userId, int transCode, String transMsg, int consumeMoney, Long businessId);
+	WalletTransResultDTO consume(WalletConsumeReq consumeReq);
 }
