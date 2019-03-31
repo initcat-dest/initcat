@@ -42,12 +42,12 @@ public class WalletDaoImpl implements WalletDao {
 		WalletTransRecord record = new WalletTransRecord();
 		record.setUserId(userId);
 		record.setOperateMoney(operateMoney);
-		record.setTradeMoney(tradeMoney);
+		record.setTransMoney(tradeMoney);
 		record.setOperateType(operateType);
 		record.setCreateTime(new Date());
 		record.setBusinessId(businessId);
-		record.setTradeCode(transCode);
-		record.setTradeMsg(transMsg);
+		record.setTransMoney(transCode);
+		record.setTransMsg(transMsg);
 
 		walletTransRecordRepository.save(record);
 		// TODO

@@ -38,15 +38,15 @@ public class WalletTransRecord implements Serializable {
 	/**
 	 * 交易余额（单位：分）
 	 */
-	private Integer tradeMoney;
+	private Integer transMoney;
 	/**
 	 * 交易码
 	 */
-	private Integer tradeCode;
+	private Integer transCode;
 	/**
 	 * 交易信息
 	 */
-	private String tradeMsg;
+	private String transMsg;
 	/**
 	 * 业务ID
 	 */

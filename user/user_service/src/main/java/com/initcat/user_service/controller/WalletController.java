@@ -7,10 +7,7 @@ import com.initcat.user_common.model.resp.WalletConsumeResp;
 import com.initcat.user_common.model.resp.WalletRechargeResp;
 import com.initcat.user_service.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 零钱账户Controller
@@ -28,14 +25,15 @@ public class WalletController {
 	WalletService walletService;
 
 	@PostMapping("/recharge")
-	public WalletRechargeResp recharge(@RequestBody WalletRechargeReq recargeReq) {
-		WalletTransResultDTO rechargeResult = walletService.recharge(recargeReq);
+	public WalletRechargeResp recharge(@RequestBody WalletRechargeReq rechargeReq) {
+		WalletTransResultDTO rechargeResult = walletService.recharge(rechargeReq);
 		WalletRechargeResp rechargeResp = new WalletRechargeResp();
 		rechargeResp.setRechargeResult(rechargeResult);
 		return rechargeResp;
 	}
 
 	@PostMapping("/consume")
+	@ResponseBody
 	public WalletConsumeResp consume(@RequestBody WalletConsumeReq consumeReq) {
 		WalletTransResultDTO consumeResult = walletService.consume(consumeReq);
 		WalletConsumeResp consumeResp = new WalletConsumeResp();
