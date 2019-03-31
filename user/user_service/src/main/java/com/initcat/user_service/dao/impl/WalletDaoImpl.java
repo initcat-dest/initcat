@@ -35,7 +35,7 @@ public class WalletDaoImpl implements WalletDao {
 
 	@Override
 	public WalletAccountInfo findByUserIdForUpdate(Long userId) {
-		return walletAccountInfoRepository.findByUserId(userId);
+		return walletAccountInfoRepository.queryByUserId(userId);
 	}
 
 	@Override
