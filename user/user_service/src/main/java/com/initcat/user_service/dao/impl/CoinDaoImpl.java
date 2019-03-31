@@ -2,15 +2,18 @@ package com.initcat.user_service.dao.impl;
 
 import com.initcat.user_service.dao.CoinDao;
 import com.initcat.user_service.model.db.CoinAccountInfo;
-import com.initcat.user_service.repository.CoinRepository;
+import com.initcat.user_service.repository.CoinAccountInfoRepository;
+import com.initcat.user_service.repository.CoinTransRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class CoinDaoImpl implements CoinDao {
     @Autowired
-    CoinRepository coinRepository;
+    CoinAccountInfoRepository coinAccountInfoRepository;
 
+    @Autowired
+    CoinTransRecordRepository coinTransRecordRepository;
     @Override
     public void saveAccountInfo(CoinAccountInfo accountInfo) {
 
