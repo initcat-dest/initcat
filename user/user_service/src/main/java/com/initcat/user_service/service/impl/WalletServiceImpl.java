@@ -2,6 +2,8 @@ package com.initcat.user_service.service.impl;
 
 import com.initcat.user_common.model.dto.WalletAccountInfoDTO;
 import com.initcat.user_common.model.dto.WalletTransResultDTO;
+import com.initcat.user_common.model.req.WalletConsumeReq;
+import com.initcat.user_common.model.req.WalletRechargeReq;
 import com.initcat.user_service.dao.WalletDao;
 import com.initcat.user_service.model.db.WalletAccountInfo;
 import com.initcat.user_service.service.WalletService;
@@ -51,8 +53,14 @@ public class WalletServiceImpl implements WalletService {
 	}
 
 	@Override
-	@Transactional
-	public WalletTransResultDTO recharge(Long userId, int transCode, String transMsg, int rechargeMoney, Long businessId) {
+	@Transactional(rollbackFor = Exception.class)
+	public WalletTransResultDTO recharge(WalletRechargeReq rechargeReq) {
+
+		Long userId = rechargeReq.getUserId();
+		int rechargeMoney = rechargeReq.getRechargeMoney();
+		int transCode = rechargeReq.getTransCode();
+		String transMsg = rechargeReq.getTransMsg();
+		Long businessId = rechargeReq.getBusinessId();
 
 		try {
 			// 校验参数
@@ -102,51 +110,52 @@ public class WalletServiceImpl implements WalletService {
 	}
 
 	@Override
-	@Transactional
-	public WalletTransResultDTO consume(Long userId, int transCode, String transMsg, int consumeMoney, Long businessId) {
+	@Transactional(rollbackFor = Exception.class)
+	public WalletTransResultDTO consume(WalletConsumeReq consumeReq) {
+
+		Long userId = consumeReq.getUserId();
+		int consumeMoney = consumeReq.getConsumeMoney();
+		int transCode = consumeReq.getTransCode();
+		String transMsg = consumeReq.getTransMsg();
+		Long businessId = consumeReq.getBusinessId();
+
 		try {
-			//校验参数
+			// 校验参数
 			if (userId == null || consumeMoney <= 0 || transCode <= 0) {
 				return WalletTransResultDTO.builder().transResult(PARAMETER_ILLEGAL).build();
 			}
-			//加缓存锁
+			// 加缓存锁
 			String redisLockKey = "wallet:recharge" + userId + ":" + transCode + ":" + businessId;
 			if (!RedisUtils.setnxex(redisLockKey, "1", 5)) {
 				return WalletTransResultDTO.builder().transResult(REPEAT_REQUEST).build();
 			}
-			/**
-			 * 用锁的形势获取用户信息，并判断用户是否存在与校验用户状态
-			 */
+			// 用锁的形势获取用户信息，并判断用户是否存在与校验用户状态
 			WalletAccountInfo accountInfo = walletDao.findByUserIdForUpdate(userId);
-			if (accountInfo == null) {
-				//如果用户不存在，重新开户，并加锁
-				openAccount(userId);
-				accountInfo = walletDao.findByUserIdForUpdate(userId);
-			}
-			//验证用户状态
+
+			// 验证用户状态
 			if (accountInfo == null || accountInfo.getAccountStatus() != 1) {
 				return WalletTransResultDTO.builder().transResult(ACCOUNT_ILLEGAL).build();
 			}
-			//判断消费金额是否大于余额
+			// 判断消费金额是否大于余额
 			if (accountInfo.getWalletBalance() < consumeMoney) {
 				return WalletTransResultDTO.builder().transResult(LACK_BALANCE).build();
 			}
 			Integer tradeMoney = accountInfo.getWalletBalance() - consumeMoney;
-			//添加金币消费记录
+			// 添加金币消费记录
 			Boolean saveStatus = walletDao.saveTransRecord(userId, consumeMoney, transCode, 2, transMsg, businessId, tradeMoney);
 			if (!saveStatus) {
-				//保存失败，直接返回
+				// 保存失败，直接返回
 				return WalletTransResultDTO.builder().transResult(SAVE_RECORD_ERROR).build();
 			}
-			//添加消费记录，更新金币余额
+			// 添加消费记录，更新金币余额
 			accountInfo.setWalletBalance(tradeMoney);
 			walletDao.updateAccountInfo(accountInfo);
 			WalletAccountInfoDTO walletAccountInfoDTO = WalletAccountInfoDTO.builder().userId(userId).walletBalance(tradeMoney).build();
 			return WalletTransResultDTO.builder().transResult(SUCCESS).walletAccountInfo(walletAccountInfoDTO).build();
 		} catch (Exception e) {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-			logger.error("walletRechange error userid:" + userId + ", transCode:" + transCode
-					+ ", rechargeMoney:" + consumeMoney, e);
+			logger.error("walletConsume error userid:" + userId + ", transCode:" + transCode
+					+ ", consumeMoney:" + consumeMoney, e);
 			return WalletTransResultDTO.builder().transResult(SERVICE_ERROR).build();
 		}
 

@@ -1,7 +1,7 @@
 package com.initcat.frontend.common;
 
 /**
- * class description
+ * 静态常量
  *
  * @author libo
  * @package com.frontend.common
@@ -9,5 +9,5 @@ package com.initcat.frontend.common;
  * @date 2019/3/10
  */
 public class Constant {
-	public static final String HTTP_USER_LOCAL_PREFIX = "http://localhost:8082/user_service/";
+
 }
