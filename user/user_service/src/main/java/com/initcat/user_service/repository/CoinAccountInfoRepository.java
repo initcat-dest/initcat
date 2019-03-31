@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * limingsong
  * 19/3/24
  */
-public interface CoinRepository extends JpaRepository<Object,Object> {
-    CoinTransRecord updateTrans(Long userId);
+public interface CoinAccountInfoRepository extends JpaRepository<CoinAccountInfo,Long> {
+
 
     CoinAccountInfo updateAccount(Long userId);
 

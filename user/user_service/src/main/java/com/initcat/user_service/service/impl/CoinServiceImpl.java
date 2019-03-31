@@ -112,39 +112,30 @@ public class CoinServiceImpl implements CoinService {
                                       int transCode,String transMsg,Long businessId) {
 
         try {
-            /**
-             * TODO song /** 是多行注释。这里直接用 // 注释就行了 //后空一格
-             * 校验参数是否合法
-             */
             // 校验参数是否合法
             if (userId == null || operateCoin <= 0 || transCode <= 0) {
                 return CoinTransRecordDTO.builder().transResult(PARAMETER_ILLEGAL).build();
             }
-            /**
-             * TODO song
-             *根据业务id和消费类型加缓存锁
-             */
+            // 根据业务id和消费类型加缓存锁
             String redisLockKey = "coin:" + userId + ":" + transCode + "：" + businessId;
             if (!RedisUtils.setnxex(redisLockKey, "1", 5)) {
                 return CoinTransRecordDTO.builder().transResult(REPEAT_REQUEST).build();
             }
-            /**
-             * TODO song
-             * 检查用户状态与用户余额，并校验用户状态
-             */
+
+            //检查用户状态与用户余额，并校验用户状态
             CoinAccountInfo coinAccountInfo = coinDao.findByUserIdForUpdate(userId);
-            // 如果不存在，用户开户，在加锁
+            // 如果不存在，返回用户不存在
             // TODO song 这里的业务逻辑不对，用户来消费是不需要开户的，直接返回账户不存在即可
-            if (coinAccountInfo == null) {
-                openAccount(userId);
-                coinAccountInfo = coinDao.findByUserIdForUpdate(userId);
-            }
+            /*if (coinAccountInfo == null) {
+                return CoinTransRecordDTO.builder().transResult(ACCOUNT_ILLEGAL).build();
+            }*/
+            //消费的业务不需要实现开户，就像银行取钱，没有卡的情况下怎么给你取，即使给你开户了，里面照样没有钱
             //校验用户状态
             if (coinAccountInfo == null || coinAccountInfo.getAccountStatus() != 1) {
                 return CoinTransRecordDTO.builder().transResult(ACCOUNT_ILLEGAL).build();
             }
             //校验消费金额是否大于余额 // TODO song 消费金币数是允许和余额一样的
-            if (operateCoin > coinAccountInfo.getCoinBalance()) {
+            if (operateCoin >=coinAccountInfo.getCoinBalance()) {
                 return CoinTransRecordDTO.builder().transResult(LACK_BALANCE).build();
             }
             //交易后余额
@@ -152,7 +143,7 @@ public class CoinServiceImpl implements CoinService {
             //添加金币消费记录
             Boolean saveStatus = coinDao.saveTransRecord(userId, operateCoin, transCode, 2, transMsg, businessId, tradeCoin);
             if (!saveStatus) {
-                //如果交易失败，直接返回 // TODO song 这里的注释应该是添加金币消费记录失败
+                //如果添加金币消费记录失败，直接返回 // TODO song 这里的注释应该是添加金币消费记录失败
                 return CoinTransRecordDTO.builder().transResult(SAVE_RECORD_ERROR).build();
             }
             //更新金币消费金额
@@ -160,12 +151,12 @@ public class CoinServiceImpl implements CoinService {
             coinDao.updateAccountInfo(coinAccountInfo);
             CoinAccountInfoDTO accountInfoDTO = CoinAccountInfoDTO.builder().userId(userId).coinBalance(tradeCoin).build();
             // TODO accountInfoDTO 并没有返回给调用方
-            return CoinTransRecordDTO.builder().transResult(SUCCESS).build();
+            return CoinTransRecordDTO.builder().transResult(SUCCESS).coinAccountInfo(accountInfoDTO).build();
         } catch (Exception e) {
             // 手动回滚
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             // TODO song 这里的日志开头要修改。。
-            logger.error("coinRechange error userid:"+userId+",transCode:"+transCode+
+            logger.error("coinConsume error userid:"+userId+",transCode:"+transCode+
                     ",operateCoin:"+operateCoin,e);
             return CoinTransRecordDTO.builder().transResult(SERVICE_ERROR).build();
         }
