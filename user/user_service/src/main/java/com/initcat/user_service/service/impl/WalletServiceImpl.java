@@ -105,6 +105,7 @@ public class WalletServiceImpl implements WalletService {
 			}
 			// 添加金币消费记录成功，更新账户金币余额
 			accountInfo.setWalletBalance(tradeMoney);
+			accountInfo.setUpdateTime(new Date());
 			walletDao.updateAccountInfo(accountInfo);
 			WalletAccountInfoDTO accountInfoDTO = WalletAccountInfoDTO.builder().userId(userId).walletBalance(tradeMoney).build();
 			return WalletTransResultDTO.builder().transResult(SUCCESS).walletAccountInfo(accountInfoDTO).build();
@@ -158,6 +159,7 @@ public class WalletServiceImpl implements WalletService {
 			}
 			// 添加消费记录，更新金币余额
 			accountInfo.setWalletBalance(tradeMoney);
+			accountInfo.setUpdateTime(new Date());
 			walletDao.updateAccountInfo(accountInfo);
 			WalletAccountInfoDTO walletAccountInfoDTO = WalletAccountInfoDTO.builder().userId(userId).walletBalance(tradeMoney).build();
 			return WalletTransResultDTO.builder().transResult(SUCCESS).walletAccountInfo(walletAccountInfoDTO).build();
