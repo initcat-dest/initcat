@@ -15,8 +15,6 @@ public interface CoinAccountInfoRepository extends JpaRepository<CoinAccountInfo
 
     CoinAccountInfo findByUserId(Long userId);
 
-    CoinAccountInfo updateByUserId(CoinAccountInfo coinAccountInfo);
-
     @Lock(value = LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT cai FROM CoinAccountInfo cai WHERE cai.userId = ?1")
     CoinAccountInfo queryByUserId(Long userId);

@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class CoinDaoImpl implements CoinDao {
+
     @Autowired
     CoinAccountInfoRepository coinAccountInfoRepository;
-
     @Autowired
     CoinTransRecordRepository coinTransRecordRepository;
 
@@ -23,7 +23,7 @@ public class CoinDaoImpl implements CoinDao {
 
     @Override
     public void updateAccountInfo(CoinAccountInfo coinAccountInfo) {
-        coinAccountInfoRepository.updateByUserId(coinAccountInfo);
+        coinAccountInfoRepository.saveAndFlush(coinAccountInfo);
     }
 
     @Override
