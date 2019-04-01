@@ -1,8 +1,11 @@
-package com.initcat.user_service.service;
+package com.initcat.user_common.service;
 
+import com.initcat.user_common.model.dto.CoinTransRecordDTO;
 import com.initcat.user_common.model.dto.CoinTransResultDTO;
 import com.initcat.user_common.model.req.CoinConsumeReq;
 import com.initcat.user_common.model.req.CoinRechargeReq;
+
+import java.util.List;
 
 
 public interface CoinService {
@@ -21,4 +24,6 @@ public interface CoinService {
      * 消费
      */
     CoinTransResultDTO consume(CoinConsumeReq coinConsumeReq);
+
+    List<CoinTransRecordDTO> listTransRecord(Long userId, int pageNum, int pageSize);
 }

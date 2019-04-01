@@ -6,6 +6,8 @@ import com.initcat.user_service.model.db.CoinTransRecord;
 import com.initcat.user_service.repository.CoinAccountInfoRepository;
 import com.initcat.user_service.repository.CoinTransRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -52,4 +54,10 @@ public class CoinDaoImpl implements CoinDao {
         coinTransRecordRepository.save(coinTransRecord);
         return coinTransRecord.getId() != null && coinTransRecord.getId() > 0;
     }
+
+    @Override
+    public Page<CoinTransRecord> listTransRecord(Long userId, int pageNum, int pageSize) {
+        return coinTransRecordRepository.findAllByUserId(userId, new PageRequest(pageNum, pageSize));
+    }
+
 }

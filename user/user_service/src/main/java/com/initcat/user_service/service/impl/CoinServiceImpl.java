@@ -1,21 +1,27 @@
 package com.initcat.user_service.service.impl;
 
 import com.initcat.user_common.model.dto.CoinAccountInfoDTO;
+import com.initcat.user_common.model.dto.CoinTransRecordDTO;
 import com.initcat.user_common.model.dto.CoinTransResultDTO;
 import com.initcat.user_common.model.req.CoinConsumeReq;
 import com.initcat.user_common.model.req.CoinRechargeReq;
+import com.initcat.user_common.service.CoinService;
 import com.initcat.user_service.dao.CoinDao;
 import com.initcat.user_service.model.db.CoinAccountInfo;
-import com.initcat.user_service.service.CoinService;
+import com.initcat.user_service.model.db.CoinTransRecord;
 import com.initcat.user_service.util.RedisUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static com.initcat.user_common.model.enums.CointransRecordEnum.*;
 
@@ -49,8 +55,9 @@ public class CoinServiceImpl implements CoinService {
 
     /**
      * 充值
+     * <p>
+     * =
      *
-     =
      * @return
      */
     @Override
@@ -58,7 +65,7 @@ public class CoinServiceImpl implements CoinService {
     public CoinTransResultDTO recharge(CoinRechargeReq coinRechargeReq) {
         try {
             //校验参数
-            if (coinRechargeReq.getUserId() == null ||coinRechargeReq.getOperateCoin()<= 0 || coinRechargeReq.getTransCode() <= 0) {
+            if (coinRechargeReq.getUserId() == null || coinRechargeReq.getOperateCoin() <= 0 || coinRechargeReq.getTransCode() <= 0) {
                 return CoinTransResultDTO.builder().transResult(PARAMETER_ILLEGAL).build();
             }
             //根据消费类型和业务ID进行缓存锁
@@ -81,7 +88,7 @@ public class CoinServiceImpl implements CoinService {
             Integer tradeCoin = accountInfo.getCoinBalance() + coinRechargeReq.getOperateCoin();
 
             // 添加金币充值记录
-            boolean saveStatus = coinDao.saveTransRecord(coinRechargeReq.getUserId(),coinRechargeReq.getOperateCoin() ,coinRechargeReq.getTransCode(), 1, coinRechargeReq.getTransMsg(), coinRechargeReq.getBusinessId(), tradeCoin);
+            boolean saveStatus = coinDao.saveTransRecord(coinRechargeReq.getUserId(), coinRechargeReq.getOperateCoin(), coinRechargeReq.getTransCode(), 1, coinRechargeReq.getTransMsg(), coinRechargeReq.getBusinessId(), tradeCoin);
             if (!saveStatus) {
                 //保存交易记录失败，直接返回
                 return CoinTransResultDTO.builder().transResult(SAVE_RECORD_ERROR).build();
@@ -95,7 +102,7 @@ public class CoinServiceImpl implements CoinService {
             //手动回滚事物
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             logger.error("coinRechange error userid:" + coinRechargeReq.getUserId() + ",transCode:" + coinRechargeReq.getTransCode() +
-                    ",operateCoin:" +coinRechargeReq.getOperateCoin(), e);
+                    ",operateCoin:" + coinRechargeReq.getOperateCoin(), e);
             return CoinTransResultDTO.builder().transResult(SERVICE_ERROR).build();
         }
     }
@@ -151,6 +158,20 @@ public class CoinServiceImpl implements CoinService {
                     ",operateCoin:" + coinConsumeReq.getOperateCoin(), e);
             return CoinTransResultDTO.builder().transResult(SERVICE_ERROR).build();
         }
+    }
+
+    @Override
+    public List<CoinTransRecordDTO> listTransRecord(Long userId, int pageNum, int pageSize) {
+        Page<CoinTransRecord> coinTransRecords = coinDao.listTransRecord(userId, pageNum, pageSize);
+        List<CoinTransRecord> content = coinTransRecords.getContent();
+        List<CoinTransRecordDTO> CoinTransRecordDTOs = new ArrayList<>();
+        CoinTransRecordDTO coinTransRecordDTO;
+        for (CoinTransRecord record : content) {
+            coinTransRecordDTO = new CoinTransRecordDTO();
+            BeanUtils.copyProperties(record, coinTransRecordDTO);
+            CoinTransRecordDTOs.add(coinTransRecordDTO);
+        }
+        return CoinTransRecordDTOs;
     }
 
 }

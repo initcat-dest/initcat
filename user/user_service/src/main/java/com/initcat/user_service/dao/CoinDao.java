@@ -1,6 +1,8 @@
 package com.initcat.user_service.dao;
 
 import com.initcat.user_service.model.db.CoinAccountInfo;
+import com.initcat.user_service.model.db.CoinTransRecord;
+import org.springframework.data.domain.Page;
 
 
 public interface CoinDao {
@@ -44,7 +46,9 @@ public interface CoinDao {
     boolean saveTransRecord(Long userId, int operateCoin, int transCode, int operateType,
                             String transMsg, Long businessId,int tradeCoin);
 
-
-
+    /**
+     * 获取交易记录
+     */
+    Page<CoinTransRecord> listTransRecord(Long userId, int pageNum, int pageSize);
 
 }

@@ -1,16 +1,17 @@
 package com.initcat.user_service.controller;
 
+import com.initcat.user_common.model.dto.CoinTransRecordDTO;
 import com.initcat.user_common.model.dto.CoinTransResultDTO;
 import com.initcat.user_common.model.req.CoinConsumeReq;
 import com.initcat.user_common.model.req.CoinRechargeReq;
 import com.initcat.user_common.model.resp.CoinConsumeResp;
+import com.initcat.user_common.model.resp.CoinListTransRecordResp;
 import com.initcat.user_common.model.resp.CoinRechargeResp;
-import com.initcat.user_service.service.CoinService;
+import com.initcat.user_common.service.CoinService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/coin")
@@ -35,4 +36,15 @@ public class CoinController {
         coinConsumeResp.setConsumeResult(consumeResult);
         return coinConsumeResp;
     }
+    @RequestMapping("/listTransRecord")
+    @ResponseBody
+    public CoinListTransRecordResp listTransRecord(@RequestParam("userId") Long userId,
+                                                   @RequestParam("pageNum") int pageNum,
+                                                   @RequestParam("pageSize") int pageSize) {
+        List<CoinTransRecordDTO> coinTransRecordDTOS =  coinService.listTransRecord(userId, pageNum, pageSize);
+        CoinListTransRecordResp coinListTransRecordResp = new CoinListTransRecordResp();
+        coinListTransRecordResp.setTransRecords(coinTransRecordDTOS);
+        return coinListTransRecordResp;
+    }
+
 }
