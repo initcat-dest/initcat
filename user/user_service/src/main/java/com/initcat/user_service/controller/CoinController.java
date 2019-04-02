@@ -19,6 +19,7 @@ public class CoinController {
     @Autowired
     CoinService coinService;
 
+    // TODO song MVC不能直接使用RequestMapping,应该根据相应的操作使用 https://www.cnblogs.com/nelson-hu/p/8556422.html
     @RequestMapping("/recharge")
     @ResponseBody
     public CoinRechargeResp recharge(@RequestBody CoinRechargeReq coinRechargeReq) {
@@ -28,6 +29,7 @@ public class CoinController {
         return coinRechargeResp;
     }
 
+    // TODO song MVC不能直接使用RequestMapping,应该根据相应的操作使用 https://www.cnblogs.com/nelson-hu/p/8556422.html
     @RequestMapping("/consume")
     @ResponseBody
     public CoinConsumeResp consume(@RequestBody CoinConsumeReq coinConsumeReq) {
@@ -36,6 +38,8 @@ public class CoinController {
         coinConsumeResp.setConsumeResult(consumeResult);
         return coinConsumeResp;
     }
+
+    // TODO song MVC不能直接使用RequestMapping,应该根据相应的操作使用 https://www.cnblogs.com/nelson-hu/p/8556422.html
     @RequestMapping("/listTransRecord")
     @ResponseBody
     public CoinListTransRecordResp listTransRecord(@RequestParam("userId") Long userId,
