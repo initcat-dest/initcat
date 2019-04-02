@@ -26,6 +26,12 @@
             <artifactId>user_common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <!-- 引入其他子工程包 -->
+        <dependency>
+            <groupId>com.initcat.common</groupId>
+            <artifactId>common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
         <!-- spring boot web支持：mvc,aop... 这个是最基本的，基本每一个基本的demo都是需要引入的。-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
