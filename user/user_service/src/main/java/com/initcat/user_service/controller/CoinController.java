@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/coin")
 public class CoinController {
-    @Autowired
+       @Autowired
     CoinService coinService;
 
     // TODO song MVC不能直接使用RequestMapping,应该根据相应的操作使用 https://www.cnblogs.com/nelson-hu/p/8556422.html
@@ -39,6 +39,7 @@ public class CoinController {
 
     // TODO song MVC不能直接使用RequestMapping,应该根据相应的操作使用 https://www.cnblogs.com/nelson-hu/p/8556422.html
     @GetMapping("/listTransRecord")
+    @ResponseBody
     public CoinListTransRecordResp listTransRecord(@RequestParam("userId") Long userId,
                                                    @RequestParam("pageNum") int pageNum,
                                                    @RequestParam("pageSize") int pageSize) {

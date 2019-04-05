@@ -64,11 +64,11 @@ public class CoinServiceImpl implements CoinService {
     @Transactional
     public CoinTransResultDTO recharge(CoinRechargeReq coinRechargeReq) {
         try {
-            //校验参数
-            if (coinRechargeReq.getUserId() == null || coinRechargeReq.getOperateCoin() <= 0 || coinRechargeReq.getTransCode() <= 0) {
+            // 校验参数
+            if (coinRechargeReq.getUserId() == null || coinRechargeReq.getRechargeCoin() <= 0 || coinRechargeReq.getTransCode() <= 0) {
                 return CoinTransResultDTO.builder().transResult(PARAMETER_ILLEGAL).build();
             }
-            //根据消费类型和业务ID进行缓存锁
+            // 根据消费类型和业务ID进行缓存锁
             String redisLockKey = "coin:recharge:" + coinRechargeReq.getUserId() + ":" + coinRechargeReq.getTransCode() + ":" + coinRechargeReq.getBusinessId();
             if (!RedisUtils.setnxex(redisLockKey, "1", 5)) {
                 return CoinTransResultDTO.builder().transResult(REPEAT_REQUEST).build();
@@ -85,10 +85,10 @@ public class CoinServiceImpl implements CoinService {
                 return CoinTransResultDTO.builder().transResult(ACCOUNT_ILLEGAL).build();
             }
             // 交易完成后余额
-            Integer tradeCoin = accountInfo.getCoinBalance() + coinRechargeReq.getOperateCoin();
+            Integer tradeCoin = accountInfo.getCoinBalance() + coinRechargeReq.getRechargeCoin();
 
             // 添加金币充值记录
-            boolean saveStatus = coinDao.saveTransRecord(coinRechargeReq.getUserId(), coinRechargeReq.getOperateCoin(), coinRechargeReq.getTransCode(), 1, coinRechargeReq.getTransMsg(), coinRechargeReq.getBusinessId(), tradeCoin);
+            boolean saveStatus = coinDao.saveTransRecord(coinRechargeReq.getUserId(), coinRechargeReq.getRechargeCoin(), coinRechargeReq.getTransCode(), 1, coinRechargeReq.getTransMsg(), coinRechargeReq.getBusinessId(), tradeCoin);
             if (!saveStatus) {
                 //保存交易记录失败，直接返回
                 return CoinTransResultDTO.builder().transResult(SAVE_RECORD_ERROR).build();
@@ -102,7 +102,7 @@ public class CoinServiceImpl implements CoinService {
             //手动回滚事物
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             logger.error("coinRechange error userid:" + coinRechargeReq.getUserId() + ",transCode:" + coinRechargeReq.getTransCode() +
-                    ",operateCoin:" + coinRechargeReq.getOperateCoin(), e);
+                    ",operateCoin:" + coinRechargeReq.getRechargeCoin(), e);
             return CoinTransResultDTO.builder().transResult(SERVICE_ERROR).build();
         }
     }
