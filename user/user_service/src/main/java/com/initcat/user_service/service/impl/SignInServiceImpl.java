@@ -1,12 +1,16 @@
 package com.initcat.user_service.service.impl;
 
-import com.initcat.user_common.model.dto.SignInInfoDTO;
 import com.initcat.user_common.model.dto.SignInResultDTO;
+import com.initcat.user_common.model.req.CoinRechargeReq;
+import com.initcat.user_common.model.req.SignInReq;
+import com.initcat.user_common.service.CoinService;
 import com.initcat.user_common.service.SignInService;
-import com.initcat.user_service.model.db.CoinAccountInfo;
+import com.initcat.user_service.dao.SignInDao;
+import com.initcat.user_service.model.db.SignInInfo;
 import com.initcat.user_service.util.RedisUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,68 +21,77 @@ import static com.initcat.user_common.model.enums.SignInfoEnum.*;
 @Service
 @com.alibaba.dubbo.config.annotation.Service
 public class SignInServiceImpl implements SignInService {
-
+    @Autowired
+    CoinService coinService;
+    @Autowired
+    SignInDao signInDao;
 
     @Override
     @Transactional
-    public SignInResultDTO signIn(Long userId) {
-        SignInInfoDTO info = new SignInInfoDTO();
-        CoinAccountInfo coinAccountInfo = new CoinAccountInfo();
-        String redisLockKey = "Sign:signIn:" + info.getUserId() + ":" + info.getLastSignTime() + ":" + info.getCountSignDay();
+    public SignInResultDTO signIn(SignInReq signInReq) {
+        String redisLockKey = "Sign:signIn:" + signInReq.getUserId();
         if (!RedisUtils.setnxex(redisLockKey, "1", 5)) {
             return SignInResultDTO.builder().transResult(REPEAT_REQUEST).build();
         }
-
-        boolean isTodaySignIn = DateUtils.isSameDay(info.getLastSignTime(), new Date());
+        //获取用户信息并加锁
+        SignInInfo signInInfo = signInDao.findByUserIdForUpdate(signInReq.getUserId());
+        if (signInInfo == null) {
+            coinService.openAccount(signInReq.getUserId());
+            signInInfo = signInDao.findByUserIdForUpdate(signInReq.getUserId());
+        }
+        boolean isTodaySignIn = DateUtils.isSameDay(signInReq.getLastSignTime(), new Date());
         if (isTodaySignIn) {
             return SignInResultDTO.builder().transResult(SAVE_RECORD_ERROR).build();
         } else {
             // 今天未签到情况下处理签到
             //1.昨天签到
-            boolean isYesterdaySignIn = DateUtils.isSameDay(info.getLastSignTime(),
+            boolean isYesterdaySignIn = DateUtils.isSameDay(signInReq.getLastSignTime(),
                     DateUtils.addDays(new Date(), -1));
             if (isYesterdaySignIn) {
-                info.setLastSignTime(new Date());
-                int i = info.getCountSignDay() + 1;
-                info.setCountSignDay(i);
-                info.setUpdateTime(new Date());
-                switch (info.getCountSignDay()) {
-                    case 2:
-                        int coinBalance = coinAccountInfo.getCoinBalance() + 20;
-                        coinAccountInfo.setCoinBalance(coinBalance);
-                        break;
-                    case 3:
-                        coinBalance = coinAccountInfo.getCoinBalance() + 30;
-                        coinAccountInfo.setCoinBalance(coinBalance);
-                    case 4:
-                        coinBalance = coinAccountInfo.getCoinBalance() + 40;
-                        coinAccountInfo.setCoinBalance(coinBalance);
-                        break;
-                    case 5:
-                        coinBalance = coinAccountInfo.getCoinBalance() + 50;
-                        coinAccountInfo.setCoinBalance(coinBalance);
-                        break;
-                    case 6:
-                        coinBalance = coinAccountInfo.getCoinBalance() + 60;
-                        coinAccountInfo.setCoinBalance(coinBalance);
-                        break;
-                    default:
-                        coinBalance = coinAccountInfo.getCoinBalance() + 70;
-                        coinAccountInfo.setCoinBalance(coinBalance);
-                        break;
-                }
-
+                signInReq.setLastSignTime(new Date());
+                int i = signInReq.getCountSignDay() + 1;
+                signInReq.setCountSignDay(i);
+                signInReq.setUpdateTime(new Date());
+                int signInAwardCoin = getSignInAwardCoin(signInReq);
+                CoinRechargeReq coinRechargeReq = new CoinRechargeReq();
+                coinRechargeReq.setRechargeCoin(signInAwardCoin);
+                coinService.recharge(coinRechargeReq);
+                signInDao.updateAccountInfo(signInInfo);
                 return SignInResultDTO.builder().transResult(SUCCESS).build();
             } else {
-                //2.昨天未签到
-                info.setLastSignTime(new Date());
-                info.setCountSignDay(1);
-                info.setUpdateTime(new Date());
-                int coinBalance = coinAccountInfo.getCoinBalance() + 10;
-                coinAccountInfo.setCoinBalance(coinBalance);
+                //2.昨天未签到或从未签到
+                signInReq.setLastSignTime(new Date());
+                signInReq.setCountSignDay(1);
+                signInReq.setUpdateTime(new Date());
+                signInDao.updateAccountInfo(signInInfo);
                 return SignInResultDTO.builder().transResult(SUCCESS).build();
             }
         }
+    }
+
+    private int getSignInAwardCoin(SignInReq signInReq) {
+        int signInAwardCoin = 0;
+        switch (signInReq.getCountSignDay()) {
+            case 2:
+                signInAwardCoin = 20;
+                break;
+            case 3:
+                signInAwardCoin = 30;
+                break;
+            case 4:
+                signInAwardCoin = 40;
+                break;
+            case 5:
+                signInAwardCoin = 50;
+                break;
+            case 6:
+                signInAwardCoin = 60;
+                break;
+            default:
+                signInAwardCoin = 70;
+                break;
+        }
+        return signInAwardCoin;
     }
 
     public static void main(String[] args) {

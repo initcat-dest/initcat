@@ -16,7 +16,7 @@ public class SignInInfo implements Serializable {
     /**
      * 用户id
      */
-    private int userId;
+    private Long userId;
     /**
      * '最后签到时间'
      */

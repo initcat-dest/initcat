@@ -2,6 +2,7 @@ package com.initcat.user_common.service;
 
 
 import com.initcat.user_common.model.dto.SignInResultDTO;
+import com.initcat.user_common.model.req.SignInReq;
 
 public interface SignInService {
     /**
@@ -10,5 +11,5 @@ public interface SignInService {
      * @param userId
      * @return
      */
-    SignInResultDTO signIn(Long userId);
+    SignInResultDTO signIn(SignInReq signInReq);
 }
