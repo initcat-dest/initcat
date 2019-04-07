@@ -30,28 +30,46 @@ public class UserServiceApplicationTests {
 	}
 
 	@Test
-	public void coinTest() {
+	public void coinTest() throws InterruptedException {
 		System.out.println("开始");
 		Thread t1 = new Thread(() -> {
-			CoinRechargeReq coinRechargeReq = new CoinRechargeReq();
-			coinRechargeReq.setUserId(123L);
-			coinRechargeReq.setBusinessId(1L);
-			coinRechargeReq.setTransCode(100);
-			coinRechargeReq.setRechargeCoin(111);
-			CoinTransResultDTO recharge = coinService.recharge(coinRechargeReq);
-			System.out.println("t1:"+recharge.getTransResult().getMsg());
+			try {
+				CoinRechargeReq coinRechargeReq1 = new CoinRechargeReq();
+				coinRechargeReq1.setUserId(123L);
+				coinRechargeReq1.setBusinessId(1L);
+				coinRechargeReq1.setTransCode(100);
+				coinRechargeReq1.setRechargeCoin(111);
+                coinRechargeReq1.setTransMsg("t1Test");
+
+                System.out.println("t1开始");
+                CoinTransResultDTO recharge = coinService.recharge(coinRechargeReq1);
+				System.out.println("t1:"+recharge.getTransResult().getMsg());
+				System.out.println("t1结束");
+			} catch (Throwable e) {
+				System.out.println("t1Exception");
+				e.printStackTrace();
+			}
 		}, "t1");
 		Thread t2 = new Thread(() -> {
-			CoinRechargeReq coinRechargeReq1 = new CoinRechargeReq();
-			coinRechargeReq1.setUserId(123L);
-			coinRechargeReq1.setBusinessId(2L);
-			coinRechargeReq1.setTransCode(200);
-			coinRechargeReq1.setRechargeCoin(222);
-			CoinTransResultDTO recharge2 = coinService.recharge(coinRechargeReq1);
-			System.out.println("t2:"+recharge2.getTransResult().getMsg());
+            try {
+                CoinRechargeReq coinRechargeReq2 = new CoinRechargeReq();
+                coinRechargeReq2.setUserId(123L);
+                coinRechargeReq2.setBusinessId(2L);
+                coinRechargeReq2.setTransCode(200);
+                coinRechargeReq2.setRechargeCoin(222);
+                coinRechargeReq2.setTransMsg("t2Test");
+                System.out.println("t2开始");
+                CoinTransResultDTO recharge2 = coinService.recharge(coinRechargeReq2);
+                System.out.println("t2:"+recharge2.getTransResult().getMsg());
+				System.out.println("t2结束");
+			} catch (Throwable e) {
+				System.out.println("t2Exception");
+				e.printStackTrace();
+			}
 		}, "t2");
 		t1.start();
 		t2.start();
+		Thread.sleep(100000L);
 		System.out.println("结束");
 	}
 }

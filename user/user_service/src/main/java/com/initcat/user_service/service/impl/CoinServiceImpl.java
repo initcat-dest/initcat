@@ -28,6 +28,7 @@ import static com.initcat.user_common.model.enums.CointransRecordEnum.*;
 @Service
 @com.alibaba.dubbo.config.annotation.Service
 public class CoinServiceImpl implements CoinService {
+
     private static Logger logger = LoggerFactory.getLogger(CoinServiceImpl.class);
 
     @Autowired
@@ -63,14 +64,18 @@ public class CoinServiceImpl implements CoinService {
     @Override
     @Transactional
     public CoinTransResultDTO recharge(CoinRechargeReq coinRechargeReq) {
+        logger.info("recharge: start userId: "+ coinRechargeReq.getUserId() + ", rechargeCoin:" + coinRechargeReq.getRechargeCoin());
         try {
             // 校验参数
             if (coinRechargeReq.getUserId() == null || coinRechargeReq.getRechargeCoin() <= 0 || coinRechargeReq.getTransCode() <= 0) {
+                logger.info("recharge: 参数错误 userId: "+ coinRechargeReq.getUserId());
                 return CoinTransResultDTO.builder().transResult(PARAMETER_ILLEGAL).build();
             }
             // 根据消费类型和业务ID进行缓存锁
             String redisLockKey = "coin:recharge:" + coinRechargeReq.getUserId() + ":" + coinRechargeReq.getTransCode() + ":" + coinRechargeReq.getBusinessId();
             if (!RedisUtils.setnxex(redisLockKey, "1", 5)) {
+                logger.info("recharge: 未拿到缓存锁 userId: "+ coinRechargeReq.getUserId() + ",transCode:" + coinRechargeReq.getTransCode() +
+                        ",operateCoin:" + coinRechargeReq.getRechargeCoin());
                 return CoinTransResultDTO.builder().transResult(REPEAT_REQUEST).build();
             }
             // 通过锁的方式获取账户信息，并校验账户是否存在 和 检验账户状态
@@ -80,8 +85,10 @@ public class CoinServiceImpl implements CoinService {
                 openAccount(coinRechargeReq.getUserId());
                 accountInfo = coinDao.findByUserIdForUpdate(coinRechargeReq.getUserId());
             }
-            //校验账户状态
+            // 校验账户状态
             if (accountInfo == null || accountInfo.getAccountStatus() != 1) {
+                logger.info("recharge: 账户异常 userId: "+ coinRechargeReq.getUserId() + ",transCode:" + coinRechargeReq.getTransCode() +
+                        ",operateCoin:" + coinRechargeReq.getRechargeCoin());
                 return CoinTransResultDTO.builder().transResult(ACCOUNT_ILLEGAL).build();
             }
             // 交易完成后余额
@@ -90,7 +97,8 @@ public class CoinServiceImpl implements CoinService {
             // 添加金币充值记录
             boolean saveStatus = coinDao.saveTransRecord(coinRechargeReq.getUserId(), coinRechargeReq.getRechargeCoin(), coinRechargeReq.getTransCode(), 1, coinRechargeReq.getTransMsg(), coinRechargeReq.getBusinessId(), tradeCoin);
             if (!saveStatus) {
-                //保存交易记录失败，直接返回
+                // 保存交易记录失败，直接返回
+                logger.info("recharge: 保存交易记录失败 userid: "+ coinRechargeReq.getUserId());
                 return CoinTransResultDTO.builder().transResult(SAVE_RECORD_ERROR).build();
             }
             //添加金币消费记录成功，更新账户金币金额
@@ -101,7 +109,7 @@ public class CoinServiceImpl implements CoinService {
         } catch (Exception e) {
             //手动回滚事物
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            logger.error("coinRechange error userid:" + coinRechargeReq.getUserId() + ",transCode:" + coinRechargeReq.getTransCode() +
+            logger.error("coinRecharge error userId:" + coinRechargeReq.getUserId() + ",transCode:" + coinRechargeReq.getTransCode() +
                     ",operateCoin:" + coinRechargeReq.getRechargeCoin(), e);
             return CoinTransResultDTO.builder().transResult(SERVICE_ERROR).build();
         }
