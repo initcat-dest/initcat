@@ -49,10 +49,10 @@ public class SignInServiceImpl implements SignInService {
                     DateUtils.addDays(new Date(), -1));
             if (isYesterdaySignIn) {
                 signInReq.setLastSignTime(new Date());
-                int i = signInReq.getCountSignDay() + 1;
-                signInReq.setCountSignDay(i);
+                int countSignDay = signInReq.getCountSignDay() + 1;
+                signInReq.setCountSignDay(countSignDay);
                 signInReq.setUpdateTime(new Date());
-                int signInAwardCoin = getSignInAwardCoin(signInReq);
+                int signInAwardCoin = getSignInAwardCoin(countSignDay);
                 CoinRechargeReq coinRechargeReq = new CoinRechargeReq();
                 coinRechargeReq.setRechargeCoin(signInAwardCoin);
                 coinService.recharge(coinRechargeReq);
@@ -70,7 +70,7 @@ public class SignInServiceImpl implements SignInService {
     }
 
     private int getSignInAwardCoin(int countSignDay) {
-        return countSignDay < 8 ? countSignDay * 10 : 70;
+        return countSignDay <= 7 ? countSignDay * 10 : 70;
 //
 //        switch (signInReq.getCountSignDay()) {
 //            case 2:
