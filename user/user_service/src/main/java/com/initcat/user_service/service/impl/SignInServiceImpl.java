@@ -21,6 +21,7 @@ import static com.initcat.user_common.model.enums.SignInfoEnum.*;
 @Service
 @com.alibaba.dubbo.config.annotation.Service
 public class SignInServiceImpl implements SignInService {
+
     @Autowired
     CoinService coinService;
     @Autowired
@@ -31,14 +32,13 @@ public class SignInServiceImpl implements SignInService {
     public SignInResultDTO signIn(SignInReq signInReq) {
         String redisLockKey = "Sign:signIn:" + signInReq.getUserId();
         if (!RedisUtils.setnxex(redisLockKey, "1", 5)) {
+            // TODO song 定义变量名
             return SignInResultDTO.builder().transResult(REPEAT_REQUEST).build();
         }
         //获取用户信息并加锁
-        SignInInfo signInInfo = signInDao.findByUserIdForUpdate(signInReq.getUserId());
-        if (signInInfo == null) {
-            coinService.openAccount(signInReq.getUserId());
-            signInInfo = signInDao.findByUserIdForUpdate(signInReq.getUserId());
-        }
+        // TODO song 思考为什么不需要forUpdate - 不需要forUpdate
+        SignInInfo signInInfo = getUserSignInfoWithInit(signInReq.getUserId());
+
         boolean isTodaySignIn = DateUtils.isSameDay(signInReq.getLastSignTime(), new Date());
         if (isTodaySignIn) {
             return SignInResultDTO.builder().transResult(SAVE_RECORD_ERROR).build();
@@ -69,29 +69,30 @@ public class SignInServiceImpl implements SignInService {
         }
     }
 
-    private int getSignInAwardCoin(SignInReq signInReq) {
-        int signInAwardCoin = 0;
-        switch (signInReq.getCountSignDay()) {
-            case 2:
-                signInAwardCoin = 20;
-                break;
-            case 3:
-                signInAwardCoin = 30;
-                break;
-            case 4:
-                signInAwardCoin = 40;
-                break;
-            case 5:
-                signInAwardCoin = 50;
-                break;
-            case 6:
-                signInAwardCoin = 60;
-                break;
-            default:
-                signInAwardCoin = 70;
-                break;
-        }
-        return signInAwardCoin;
+    private int getSignInAwardCoin(int countSignDay) {
+        return countSignDay < 8 ? countSignDay * 10 : 70;
+//
+//        switch (signInReq.getCountSignDay()) {
+//            case 2:
+//                signInAwardCoin = 20;
+//                break;
+//            case 3:
+//                signInAwardCoin = 30;
+//                break;
+//            case 4:
+//                signInAwardCoin = 40;
+//                break;
+//            case 5:
+//                signInAwardCoin = 50;
+//                break;
+//            case 6:
+//                signInAwardCoin = 60;
+//                break;
+//            default:
+//                signInAwardCoin = 70;
+//                break;
+//        }
+//        return signInAwardCoin;
     }
 
     public static void main(String[] args) {

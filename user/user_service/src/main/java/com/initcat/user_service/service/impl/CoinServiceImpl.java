@@ -46,6 +46,7 @@ public class CoinServiceImpl implements CoinService {
         accountInfo.setUserId(userId);
         accountInfo.setAccountStatus(1);
         accountInfo.setCoinBalance(0);
+        // TODO song 思考？？？
         if (accountInfo.getUserId() == null || accountInfo.getAccountStatus() != 1) {
             return CoinTransResultDTO.builder().transResult(PARAMETER_ILLEGAL).build();
         }
