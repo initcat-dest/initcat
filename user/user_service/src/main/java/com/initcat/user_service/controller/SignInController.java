@@ -1,6 +1,7 @@
 package com.initcat.user_service.controller;
 
 import com.initcat.user_common.model.dto.SignInResultDTO;
+import com.initcat.user_common.model.req.SignInReq;
 import com.initcat.user_common.model.resp.SignInResp;
 import com.initcat.user_common.service.SignInService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class SignInController {
     SignInService signInService;
     @PostMapping("/signIn")
     public SignInResp signIn(@RequestBody Long userId) {
+
+        SignInReq signInReq = new SignInReq();
+        signInReq.setUserId(userId);
         SignInResultDTO signInResultDTO = signInService.signIn(userId);
         SignInResp signInResp = new SignInResp();
         signInResp.setSignInResult(signInResultDTO);
