@@ -10,9 +10,5 @@ public class SignInResultDTO {
     /**
      * 签到结果
      */
-    private SignInfoEnum transResult;
-    /**
-     * 签到后账户信息
-     */
-    private SignInfoEnum signInAccountInfo;
+    private SignInfoEnum loginResult;
 }

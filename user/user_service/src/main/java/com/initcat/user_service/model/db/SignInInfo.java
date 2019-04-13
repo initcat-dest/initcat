@@ -3,6 +3,7 @@ package com.initcat.user_service.model.db;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -12,7 +13,13 @@ import java.util.Date;
 @Table(name = "sign_in_info")
 @Data
 public class SignInInfo implements Serializable {
+
+    /**
+     * id
+     */
     @Id
+    @GeneratedValue
+    private Long id;
     /**
      * 用户id
      */
