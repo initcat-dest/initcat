@@ -76,7 +76,7 @@ public class SignInServiceImpl implements SignInService {
                 signInInfo.setLastSignTime(new Date());
                 // 连续签到时间改为1
                 signInInfo.setCountSignDay(1);
-                // 金币加10
+                // 加金币
                 coinRechargeReq.setUserId(userId);
                 int signInAwardCoin = getSignInAwardCoin(signInInfo.getCountSignDay());
                 coinRechargeReq.setRechargeCoin(signInAwardCoin);
