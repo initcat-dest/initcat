@@ -11,10 +11,11 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Date;
 
-import static com.initcat.user_common.model.enums.SignInfoEnum.*;
+import static com.initcat.user_common.model.enums.SignInStatus.REPEAT_REQUEST;
+import static com.initcat.user_common.model.enums.SignInStatus.SUCCESS;
+
 
 @Service
 @com.alibaba.dubbo.config.annotation.Service
@@ -33,7 +34,7 @@ public class SignInServiceImpl implements SignInService {
         // 这里重新定义了缓存key名称,只要id加锁就可以了
         String redisLockKey = "signIn:lock:" + userId;
         if (!RedisUtils.setnxex(redisLockKey, "1", 5)) {
-            return SignInResultDTO.builder().signInResult(PARAMETER_ILLEGAL).build();
+            return SignInResultDTO.builder().signInResult(REPEAT_REQUEST).build();
         }
 
         // 获取用户签到信息，没有就初始化用户签到信息

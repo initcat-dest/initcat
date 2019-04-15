@@ -16,7 +16,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/coin")
 public class CoinController {
-       @Autowired
+
+    @Autowired
     CoinService coinService;
 
     @PostMapping("/recharge")

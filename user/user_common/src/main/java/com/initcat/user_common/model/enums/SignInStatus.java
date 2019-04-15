@@ -1,6 +1,7 @@
 package com.initcat.user_common.model.enums;
 
-public enum  SignInStatus {
+public enum  SignInStatus{
+
     /**
      * 成功
      */

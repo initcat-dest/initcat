@@ -13,6 +13,7 @@ import java.util.Date;
 @Table(name = "coin_account_info")
 @Data
 public class CoinAccountInfo implements Serializable {
+
     @Id
     @GeneratedValue
     private Long id;

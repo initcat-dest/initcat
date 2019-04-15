@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import javax.persistence.LockModeType;
 
 public interface SignInInfoRepository extends JpaRepository<SignInInfo, Integer> {
+
     @Lock(value = LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT cai from SignInInfo cai where cai.userId=?1")
     SignInInfo findById(Long userId);

@@ -1,6 +1,6 @@
 package com.initcat.user_common.model.dto;
 
-import com.initcat.user_common.model.enums.SignInfoEnum;
+import com.initcat.user_common.model.enums.SignInStatus;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,5 +10,5 @@ public class SignInResultDTO {
     /**
      * 签到结果
      */
-    private SignInfoEnum signInResult;
+    private SignInStatus signInResult;
 }
