@@ -12,7 +12,8 @@ public interface SignInDao {
      */
     void updateAccountInfo(SignInInfo signInInfo);
 
-    //向签到表内插入用户数据 // TODO song 方法注释使用/**
-    // TODO song 为什么使用insertId命名该方法
-    void insertId(SignInInfo signInInfo);
+    /**
+     * 向签到表内插入用户数据
+     */
+    void insertInfo(SignInInfo signInInfo);
 }

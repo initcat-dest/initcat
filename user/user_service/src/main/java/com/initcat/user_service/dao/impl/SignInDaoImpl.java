@@ -8,16 +8,14 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class SignInDaoImpl implements SignInDao {
-    // TODO song 这里要空一行在开始写代码
+
     @Autowired
     private SignInInfoRepository signInInfoRepository;
 
 
     @Override
     public SignInInfo findUser(Long userId) {
-        // TODO song 这里可以直接return 不需要写等于号前面的代码
-        SignInInfo signInInfo = signInInfoRepository.findById(userId);
-        return signInInfo;
+        return signInInfoRepository.findById(userId);
     }
 
     @Override
@@ -26,7 +24,7 @@ public class SignInDaoImpl implements SignInDao {
     }
 
     @Override
-    public void insertId(SignInInfo signInInfo) {
+    public void insertInfo(SignInInfo signInInfo) {
         signInInfoRepository.save(signInInfo);
     }
 }

@@ -1,6 +1,6 @@
 package com.initcat.user_common.model.enums;
 
-public enum  CointransRecordEnum {
+public enum CoinTransRecordEnum {
     /**
      * 成功
      */
@@ -38,7 +38,7 @@ public enum  CointransRecordEnum {
     private int code;
     private String msg;
 
-    CointransRecordEnum(int code, String msg) {
+    CoinTransRecordEnum(int code, String msg) {
         this.msg = msg;
         this.code = code;
     }

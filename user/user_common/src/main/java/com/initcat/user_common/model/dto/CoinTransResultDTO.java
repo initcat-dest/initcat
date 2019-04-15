@@ -1,6 +1,6 @@
 package com.initcat.user_common.model.dto;
 
-import com.initcat.user_common.model.enums.CointransRecordEnum;
+import com.initcat.user_common.model.enums.CoinTransRecordEnum;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,7 +10,7 @@ public class CoinTransResultDTO {
     /**
      * 交易结果
      */
-    private CointransRecordEnum transResult;
+    private CoinTransRecordEnum transResult;
     /**
      * 交易后账户信息
      */

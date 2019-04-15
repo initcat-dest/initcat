@@ -33,7 +33,7 @@ public class SignInServiceImpl implements SignInService {
         // 这里重新定义了缓存key名称,只要id加锁就可以了
         String redisLockKey = "signIn:lock:" + userId;
         if (!RedisUtils.setnxex(redisLockKey, "1", 5)) {
-            return SignInResultDTO.builder().loginResult(PARAMETER_ILLEGAL).build();
+            return SignInResultDTO.builder().signInResult(PARAMETER_ILLEGAL).build();
         }
 
         // 获取用户签到信息，没有就初始化用户签到信息
@@ -41,57 +41,50 @@ public class SignInServiceImpl implements SignInService {
         // 即一锁二断三更
         // 所以不适合用在之上
 
-        //查询用户签到信息  TODO song // 后空一格
+        // 查询用户签到信息
         SignInInfo signInInfo = getUserSignInfoWithInit(userId);
 
-        //判断用户今日是否签到 TODO song // 后空一格
+        // 判断用户今日是否签到
         boolean isTodaySignIn = DateUtils.isSameDay(signInInfo.getLastSignTime(), new Date());
         if (isTodaySignIn) {
-            // TODO song 为什么要用SAVE_RECORD_ERROR命名已签到状态
-            return SignInResultDTO.builder().loginResult(SAVE_RECORD_ERROR).build();
+            return SignInResultDTO.builder().signInResult(REPEAT_REQUEST).build();
         } else {
-            //判断用户是否连续签到 TODO song // 后空一格
+            // 判断用户是否连续签到
             boolean isYesterdaySignIn = DateUtils.isSameDay(signInInfo.getLastSignTime(),
                     DateUtils.addDays(new Date(), -1));
             CoinRechargeReq coinRechargeReq = new CoinRechargeReq();
             if (isYesterdaySignIn) {
-                // TODO song 之前跟你说过了， 代码里只需要用双斜杠注释 不能使用/**注释，会降低代码可读性
-                /**
-                 * 1.连续签到
-                 */
-                //修改最后签到时间 TODO song // 后空一格
+                // 1.连续签到
+                // 修改最后签到时间
                 signInInfo.setLastSignTime(new Date());
-                //修改连续签到时间 TODO song // 后空一格
+                // 修改连续签到时间
                 int countSignDay = signInInfo.getCountSignDay() + 1;
                 signInInfo.setCountSignDay(countSignDay);
                 signInInfo.setUpdateTime(new Date());
-                //加金币
+                // 加金币
                 int signInAwardCoin = getSignInAwardCoin(countSignDay);
                 coinRechargeReq.setUserId(userId);
                 coinRechargeReq.setRechargeCoin(signInAwardCoin);
                 coinRechargeReq.setTransCode(1);
                 coinService.recharge(coinRechargeReq);
                 signInDao.updateAccountInfo(signInInfo);
-                return SignInResultDTO.builder().loginResult(SUCCESS).build();
+                return SignInResultDTO.builder().signInResult(SUCCESS).build();
             } else {
-                // TODO song 之前跟你说过了， 代码里只需要用双斜杠注释 不能使用/**注释，会降低代码可读性
-                /**
-                 * 2.连续签到中断或从未签到
-                 */
-                //修改最后签到时间 TODO song // 后空一格
+                // 2.连续签到中断或从未签到
+                // 修改最后签到时间
                 signInInfo.setLastSignTime(new Date());
-                //连续签到时间改为1 TODO song // 后空一格
+                // 连续签到时间改为1
                 signInInfo.setCountSignDay(1);
-                //金币加10 TODO song // 后空一格
+                // 金币加10
                 coinRechargeReq.setUserId(userId);
-                // TODO song 为什么写死加10？
-                coinRechargeReq.setRechargeCoin(10);
+                int signInAwardCoin = getSignInAwardCoin(signInInfo.getCountSignDay());
+                coinRechargeReq.setRechargeCoin(signInAwardCoin);
                 coinRechargeReq.setTransCode(1);
                 coinService.recharge(coinRechargeReq);
                 signInDao.updateAccountInfo(signInInfo);
                 signInInfo.setUpdateTime(new Date());
                 signInDao.updateAccountInfo(signInInfo);
-                return SignInResultDTO.builder().loginResult(SUCCESS).build();
+                return SignInResultDTO.builder().signInResult(SUCCESS).build();
             }
         }
     }
@@ -108,16 +101,14 @@ public class SignInServiceImpl implements SignInService {
             userSignInfo.setCreateTime(new Date());
             userSignInfo.setUpdateTime(new Date());
             coinService.openAccount(userId);
-            signInDao.insertId(userSignInfo);
+            signInDao.insertInfo(userSignInfo);
         }
         return userSignInfo;
     }
 
     private SignInInfo getUserSignInfo(Long userId) {
-        // TODO song 这里可以直接return 不需要写等于号前面的代码
-        //查询用户签到信息 TODO song // 后空一格
-        SignInInfo signInInfo = signInDao.findUser(userId);
-        return signInInfo;
+        // 查询用户签到信息
+        return signInDao.findUser(userId);
     }
 
     private int getSignInAwardCoin(int countSignDay) {
