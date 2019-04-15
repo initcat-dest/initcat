@@ -6,12 +6,12 @@ import com.initcat.user_service.model.db.SignInInfo;
 public interface SignInDao {
 
     /**
-     * 查询用户信息
+     * 查询签到信息
      */
     SignInInfo findSignInInfo(Long userId);
 
     /**
-     * 更新账户
+     * 更新签到信息
      */
     void updateSignInInfo(SignInInfo signInInfo);
 
