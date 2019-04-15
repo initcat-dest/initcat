@@ -35,30 +35,33 @@ public class SignInServiceImpl implements SignInService {
         if (!RedisUtils.setnxex(redisLockKey, "1", 5)) {
             return SignInResultDTO.builder().loginResult(PARAMETER_ILLEGAL).build();
         }
+
         // 获取用户签到信息，没有就初始化用户签到信息
         // forUpdate是用来防止数据操作时出现错误，用了之后可以先将数据锁住然后判断是执行什么业务最后进行更新，
         // 即一锁二断三更
         // 所以不适合用在之上
 
-        //查询用户签到信息
+        //查询用户签到信息  TODO song // 后空一格
         SignInInfo signInInfo = getUserSignInfoWithInit(userId);
 
-        //判断用户今日是否签到
+        //判断用户今日是否签到 TODO song // 后空一格
         boolean isTodaySignIn = DateUtils.isSameDay(signInInfo.getLastSignTime(), new Date());
         if (isTodaySignIn) {
+            // TODO song 为什么要用SAVE_RECORD_ERROR命名已签到状态
             return SignInResultDTO.builder().loginResult(SAVE_RECORD_ERROR).build();
         } else {
-            //判断用户是否连续签到
+            //判断用户是否连续签到 TODO song // 后空一格
             boolean isYesterdaySignIn = DateUtils.isSameDay(signInInfo.getLastSignTime(),
                     DateUtils.addDays(new Date(), -1));
             CoinRechargeReq coinRechargeReq = new CoinRechargeReq();
             if (isYesterdaySignIn) {
+                // TODO song 之前跟你说过了， 代码里只需要用双斜杠注释 不能使用/**注释，会降低代码可读性
                 /**
                  * 1.连续签到
                  */
-                //修改最后签到时间
+                //修改最后签到时间 TODO song // 后空一格
                 signInInfo.setLastSignTime(new Date());
-                //修改连续签到时间
+                //修改连续签到时间 TODO song // 后空一格
                 int countSignDay = signInInfo.getCountSignDay() + 1;
                 signInInfo.setCountSignDay(countSignDay);
                 signInInfo.setUpdateTime(new Date());
@@ -71,15 +74,17 @@ public class SignInServiceImpl implements SignInService {
                 signInDao.updateAccountInfo(signInInfo);
                 return SignInResultDTO.builder().loginResult(SUCCESS).build();
             } else {
+                // TODO song 之前跟你说过了， 代码里只需要用双斜杠注释 不能使用/**注释，会降低代码可读性
                 /**
                  * 2.连续签到中断或从未签到
                  */
-                //修改最后签到时间
+                //修改最后签到时间 TODO song // 后空一格
                 signInInfo.setLastSignTime(new Date());
-                //连续签到时间改为1
+                //连续签到时间改为1 TODO song // 后空一格
                 signInInfo.setCountSignDay(1);
-                //金币加10
+                //金币加10 TODO song // 后空一格
                 coinRechargeReq.setUserId(userId);
+                // TODO song 为什么写死加10？
                 coinRechargeReq.setRechargeCoin(10);
                 coinRechargeReq.setTransCode(1);
                 coinService.recharge(coinRechargeReq);
@@ -109,7 +114,8 @@ public class SignInServiceImpl implements SignInService {
     }
 
     private SignInInfo getUserSignInfo(Long userId) {
-        //查询用户签到信息
+        // TODO song 这里可以直接return 不需要写等于号前面的代码
+        //查询用户签到信息 TODO song // 后空一格
         SignInInfo signInInfo = signInDao.findUser(userId);
         return signInInfo;
     }
