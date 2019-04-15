@@ -1,6 +1,6 @@
 package com.initcat.user_common.model.enums;
 
-public enum  SignInStatus{
+public enum SignInStatusEnum {
 
     /**
      * 成功
@@ -13,7 +13,7 @@ public enum  SignInStatus{
     private int code;
     private String msg;
 
-    SignInStatus(int code, String msg) {
+    SignInStatusEnum(int code, String msg) {
         this.msg = msg;
         this.code = code;
     }

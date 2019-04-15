@@ -11,10 +11,10 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Date;
 
-import static com.initcat.user_common.model.enums.SignInStatus.REPEAT_REQUEST;
-import static com.initcat.user_common.model.enums.SignInStatus.SUCCESS;
+import static com.initcat.user_common.model.enums.SignInStatusEnum.*;
 
 
 @Service
@@ -31,7 +31,7 @@ public class SignInServiceImpl implements SignInService {
     @Transactional
     public SignInResultDTO signIn(Long userId) {
 
-        // 这里重新定义了缓存key名称,只要id加锁就可以了
+        // 这里定义了缓存key名称，给id进行加锁
         String redisLockKey = "signIn:lock:" + userId;
         if (!RedisUtils.setnxex(redisLockKey, "1", 5)) {
             return SignInResultDTO.builder().signInResult(REPEAT_REQUEST).build();
@@ -40,7 +40,7 @@ public class SignInServiceImpl implements SignInService {
         // 获取用户签到信息，没有就初始化用户签到信息
         // forUpdate是用来防止数据操作时出现错误，用了之后可以先将数据锁住然后判断是执行什么业务最后进行更新，
         // 即一锁二断三更
-        // 所以不适合用在之上
+        // 所以签到不适合用到forUpdate
 
         // 查询用户签到信息
         SignInInfo signInInfo = getUserSignInfoWithInit(userId);
@@ -68,7 +68,7 @@ public class SignInServiceImpl implements SignInService {
                 coinRechargeReq.setRechargeCoin(signInAwardCoin);
                 coinRechargeReq.setTransCode(1);
                 coinService.recharge(coinRechargeReq);
-                signInDao.updateAccountInfo(signInInfo);
+                signInDao.updateSignInInfo(signInInfo);
                 return SignInResultDTO.builder().signInResult(SUCCESS).build();
             } else {
                 // 2.连续签到中断或从未签到
@@ -82,9 +82,9 @@ public class SignInServiceImpl implements SignInService {
                 coinRechargeReq.setRechargeCoin(signInAwardCoin);
                 coinRechargeReq.setTransCode(1);
                 coinService.recharge(coinRechargeReq);
-                signInDao.updateAccountInfo(signInInfo);
+                signInDao.updateSignInInfo(signInInfo);
                 signInInfo.setUpdateTime(new Date());
-                signInDao.updateAccountInfo(signInInfo);
+                signInDao.updateSignInInfo(signInInfo);
                 return SignInResultDTO.builder().signInResult(SUCCESS).build();
             }
         }
@@ -98,7 +98,7 @@ public class SignInServiceImpl implements SignInService {
             // 连续签到时间为0
             userSignInfo.setCountSignDay(0);
             // 默认给其最后签到时间为前一天
-            userSignInfo.setLastSignTime(DateUtils.addDays(new Date(),1));
+            userSignInfo.setLastSignTime(DateUtils.addDays(new Date(), 1));
             userSignInfo.setCreateTime(new Date());
             userSignInfo.setUpdateTime(new Date());
             coinService.openAccount(userId);
@@ -109,33 +109,11 @@ public class SignInServiceImpl implements SignInService {
 
     private SignInInfo getUserSignInfo(Long userId) {
         // 查询用户签到信息
-        return signInDao.findUser(userId);
+        return signInDao.findSignInInfo(userId);
     }
 
     private int getSignInAwardCoin(int countSignDay) {
         return countSignDay <= 7 ? countSignDay * 10 : 70;
-//
-//        switch (signInReq.getCountSignDay()) {
-//            case 2:
-//                signInAwardCoin = 20;
-//                break;
-//            case 3:
-//                signInAwardCoin = 30;
-//                break;
-//            case 4:
-//                signInAwardCoin = 40;
-//                break;
-//            case 5:
-//                signInAwardCoin = 50;
-//                break;
-//            case 6:
-//                signInAwardCoin = 60;
-//                break;
-//            default:
-//                signInAwardCoin = 70;
-//                break;
-//        }
-//        return signInAwardCoin;
     }
 
 }

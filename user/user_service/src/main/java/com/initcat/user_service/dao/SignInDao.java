@@ -8,12 +8,12 @@ public interface SignInDao {
     /**
      * 查询用户信息
      */
-    SignInInfo findUser(Long userId);
+    SignInInfo findSignInInfo(Long userId);
 
     /**
      * 更新账户
      */
-    void updateAccountInfo(SignInInfo signInInfo);
+    void updateSignInInfo(SignInInfo signInInfo);
 
     /**
      * 向签到表内插入用户数据

@@ -14,12 +14,12 @@ public class SignInDaoImpl implements SignInDao {
 
 
     @Override
-    public SignInInfo findUser(Long userId) {
+    public SignInInfo findSignInInfo(Long userId) {
         return signInInfoRepository.findById(userId);
     }
 
     @Override
-    public void updateAccountInfo(SignInInfo signInInfo) {
+    public void updateSignInInfo(SignInInfo signInInfo) {
         signInInfoRepository.saveAndFlush(signInInfo);
     }
 
