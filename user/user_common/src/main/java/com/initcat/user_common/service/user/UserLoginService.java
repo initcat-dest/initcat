@@ -1,7 +1,6 @@
-package com.initcat.user_common.service;
+package com.initcat.user_common.service.user;
 
 
-import com.initcat.user_common.model.dto.CommUserDTO;
 import com.initcat.user_common.model.req.LoginReq;
 import com.initcat.user_common.model.resp.LoginResp;
 
@@ -13,7 +12,7 @@ import com.initcat.user_common.model.resp.LoginResp;
  * @company xmiles
  * @date 2018/12/10
  */
-public interface UserService {
+public interface UserLoginService {
 
     /**
      * 登录
@@ -21,12 +20,5 @@ public interface UserService {
      * @return 登录结果
      */
     LoginResp login(LoginReq loginReq);
-
-    /**
-     * 登出
-     * @param userPhone 用户手机号
-     * @return 用户信息
-     */
-    CommUserDTO logOut(String userPhone);
 
 }

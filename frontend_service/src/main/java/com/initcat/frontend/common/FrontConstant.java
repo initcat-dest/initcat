@@ -8,6 +8,6 @@ package com.initcat.frontend.common;
  * @company xmiles
  * @date 2019/3/10
  */
-public class Constant {
+public class FrontConstant {
 
 }

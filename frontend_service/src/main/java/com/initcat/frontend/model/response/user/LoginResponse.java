@@ -1,9 +1,11 @@
-package com.initcat.frontend.model;
+package com.initcat.frontend.model.response.user;
 
+import com.initcat.user_common.model.dto.CommUserDTO;
+import lombok.Builder;
 import lombok.Data;
 
 /**
- * class description
+ * 登录返回信息
  *
  * @author libo
  * @package com.frontend.model
@@ -11,10 +13,13 @@ import lombok.Data;
  * @date 2019/3/10
  */
 @Data
+@Builder
 public class LoginResponse {
 
 	private boolean loginStatus;
 
 	private String msg;
+
+	private CommUserDTO commUserInfo;
 
 }

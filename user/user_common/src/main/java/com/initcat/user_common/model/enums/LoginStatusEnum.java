@@ -1,7 +1,5 @@
 package com.initcat.user_common.model.enums;
 
-import java.io.Serializable;
-
 /**
  * class description
  *
@@ -10,8 +8,7 @@ import java.io.Serializable;
  * @company xmiles
  * @date 2019/3/18
  */
-public enum LoginStatusEnum implements Serializable {
-
+public enum LoginStatusEnum {
 	/**
 	 * 登录成功
 	 */
@@ -29,8 +26,8 @@ public enum LoginStatusEnum implements Serializable {
 	 */
 	LOGIN_ERROR_PASSWORD(4003,"密码错误");
 
-	public int code;
-	public String msg;
+	private int code;
+	private String msg;
 
 	LoginStatusEnum(int code, String msg) {
 		this.code = code;
@@ -43,5 +40,13 @@ public enum LoginStatusEnum implements Serializable {
 
 	public void setCode(int code) {
 		this.code = code;
+	}
+
+	public String getMsg() {
+		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
 	}
 }
