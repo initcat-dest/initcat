@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  * @date 2019/4/18
  */
 @Service
-@com.alibaba.dubbo.config.annotation.Service
+@com.alibaba.dubbo.config.annotation.Service(retries = -1, timeout = 6000)
 public class UserLogoutServiceImpl implements UserLogoutService {
 
     @Override
