@@ -1,6 +1,6 @@
-package com.initcat.user_common.model.dto;
+package com.initcat.user_common.dto;
 
-import com.initcat.user_common.model.enums.SignInStatusEnum;
+import com.initcat.user_common.enums.SignInStatusEnum;
 import lombok.Builder;
 import lombok.Data;
 

@@ -1,6 +1,6 @@
-package com.initcat.user_common.model.dto;
+package com.initcat.user_common.dto;
 
-import com.initcat.user_common.model.enums.WalletTransResultEnum;
+import com.initcat.user_common.enums.WalletTransResultEnum;
 import lombok.Builder;
 import lombok.Data;
 

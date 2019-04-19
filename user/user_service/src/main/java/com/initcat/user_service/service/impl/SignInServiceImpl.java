@@ -1,6 +1,6 @@
 package com.initcat.user_service.service.impl;
 
-import com.initcat.user_common.model.dto.SignInResultDTO;
+import com.initcat.user_common.dto.SignInResultDTO;
 import com.initcat.user_common.model.req.CoinRechargeReq;
 import com.initcat.user_common.service.CoinService;
 import com.initcat.user_common.service.SignInService;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
-import static com.initcat.user_common.model.enums.SignInStatusEnum.*;
+import static com.initcat.user_common.enums.SignInStatusEnum.*;
 
 
 @Service

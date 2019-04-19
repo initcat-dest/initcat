@@ -1,4 +1,4 @@
-package com.initcat.user_common.model.dto;
+package com.initcat.user_common.dto;
 
 import lombok.Builder;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package com.initcat.user_common.model.resp;
 
-import com.initcat.user_common.model.dto.WalletTransRecordDTO;
+import com.initcat.user_common.dto.WalletTransRecordDTO;
 import lombok.Data;
 
 import java.util.List;

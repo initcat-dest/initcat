@@ -1,8 +1,8 @@
 package com.initcat.user_service.service.impl;
 
-import com.initcat.user_common.model.dto.CoinAccountInfoDTO;
-import com.initcat.user_common.model.dto.CoinTransRecordDTO;
-import com.initcat.user_common.model.dto.CoinTransResultDTO;
+import com.initcat.user_common.dto.CoinAccountInfoDTO;
+import com.initcat.user_common.dto.CoinTransRecordDTO;
+import com.initcat.user_common.dto.CoinTransResultDTO;
 import com.initcat.user_common.model.req.CoinConsumeReq;
 import com.initcat.user_common.model.req.CoinRechargeReq;
 import com.initcat.user_common.service.CoinService;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.initcat.user_common.model.enums.CoinTransRecordEnum.*;
+import static com.initcat.user_common.enums.CoinTransRecordEnum.*;
 
 @Service
 @com.alibaba.dubbo.config.annotation.Service

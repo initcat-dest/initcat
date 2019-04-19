@@ -1,7 +1,7 @@
 package com.initcat.user_service.controller;
 
-import com.initcat.user_common.model.dto.WalletTransRecordDTO;
-import com.initcat.user_common.model.dto.WalletTransResultDTO;
+import com.initcat.user_common.dto.WalletTransRecordDTO;
+import com.initcat.user_common.dto.WalletTransResultDTO;
 import com.initcat.user_common.model.req.WalletConsumeReq;
 import com.initcat.user_common.model.req.WalletRechargeReq;
 import com.initcat.user_common.model.resp.WalletConsumeResp;

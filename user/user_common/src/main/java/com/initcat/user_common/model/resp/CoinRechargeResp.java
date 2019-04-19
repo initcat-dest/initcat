@@ -1,7 +1,7 @@
 package com.initcat.user_common.model.resp;
 
 
-import com.initcat.user_common.model.dto.CoinTransResultDTO;
+import com.initcat.user_common.dto.CoinTransResultDTO;
 import lombok.Data;
 
 /**

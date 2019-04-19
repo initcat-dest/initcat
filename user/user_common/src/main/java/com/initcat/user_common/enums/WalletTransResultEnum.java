@@ -1,4 +1,4 @@
-package com.initcat.user_common.model.enums;
+package com.initcat.user_common.enums;
 
 /**
  * 零钱账户交易返回枚举类

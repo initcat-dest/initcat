@@ -1,7 +1,7 @@
 package com.initcat.user_common.model.resp;
 
-import com.initcat.user_common.model.dto.CommUserDTO;
-import com.initcat.user_common.model.enums.LoginStatusEnum;
+import com.initcat.user_common.dto.CommUserDTO;
+import com.initcat.user_common.enums.LoginStatusEnum;
 import lombok.Builder;
 import lombok.Data;
 

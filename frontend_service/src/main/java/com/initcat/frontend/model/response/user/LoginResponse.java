@@ -1,6 +1,6 @@
 package com.initcat.frontend.model.response.user;
 
-import com.initcat.user_common.model.dto.CommUserDTO;
+import com.initcat.user_common.dto.CommUserDTO;
 import lombok.Builder;
 import lombok.Data;
 

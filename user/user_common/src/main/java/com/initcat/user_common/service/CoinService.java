@@ -1,7 +1,7 @@
 package com.initcat.user_common.service;
 
-import com.initcat.user_common.model.dto.CoinTransRecordDTO;
-import com.initcat.user_common.model.dto.CoinTransResultDTO;
+import com.initcat.user_common.dto.CoinTransRecordDTO;
+import com.initcat.user_common.dto.CoinTransResultDTO;
 import com.initcat.user_common.model.req.CoinConsumeReq;
 import com.initcat.user_common.model.req.CoinRechargeReq;
 

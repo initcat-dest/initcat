@@ -1,13 +1,10 @@
 package com.initcat.user_service.dao.impl;
 
-import com.alicp.jetcache.anno.Cached;
 import com.initcat.user_service.dao.UserDao;
 import com.initcat.user_service.model.db.CommUser;
 import com.initcat.user_service.repository.CommUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import static com.initcat.user_service.constant.redis.UserRedisConstant.USER_INFO;
 
 /**
  * class description
@@ -24,7 +21,6 @@ public class UserDaoImpl implements UserDao {
 	CommUserRepository commUserRepository;
 
 	@Override
-	@Cached(name = USER_INFO, key = "#userPhone", expire = 200)
 	public CommUser findByPhone(String userPhone) {
 		return commUserRepository.findByPhone(userPhone);
 	}

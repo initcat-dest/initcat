@@ -2,7 +2,7 @@ package com.initcat.user_service.service.impl.user;
 
 import com.alibaba.fastjson.JSON;
 import com.initcat.common.util.UserPasswordUtils;
-import com.initcat.user_common.model.dto.CommUserDTO;
+import com.initcat.user_common.dto.CommUserDTO;
 import com.initcat.user_common.model.req.LoginReq;
 import com.initcat.user_common.model.resp.LoginResp;
 import com.initcat.user_common.service.user.UserLoginService;
@@ -14,7 +14,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.initcat.user_common.model.enums.LoginStatusEnum.*;
+import static com.initcat.user_common.enums.LoginStatusEnum.*;
 
 @Service
 @com.alibaba.dubbo.config.annotation.Service(retries = -1, timeout = 6000)

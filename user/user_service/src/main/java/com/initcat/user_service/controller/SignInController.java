@@ -1,6 +1,6 @@
 package com.initcat.user_service.controller;
 
-import com.initcat.user_common.model.dto.SignInResultDTO;
+import com.initcat.user_common.dto.SignInResultDTO;
 import com.initcat.user_common.model.resp.SignInResp;
 import com.initcat.user_common.service.SignInService;
 import org.springframework.beans.factory.annotation.Autowired;
