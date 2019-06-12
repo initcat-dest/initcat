@@ -49,9 +49,12 @@ public class CoinController {
 
     @GetMapping("/testOOM")
     public void testOOM() {
-        for (int i = 0; i < 1000000 ; i++) {
-            String a = new String("testOOM");
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>testOOM start");
+        String name = "hello";
+        for (int i = 0; i < 1000000000 ; i++) {
+            name += name;
         }
+        System.out.println(name);
     }
 
 }
