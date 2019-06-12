@@ -47,4 +47,11 @@ public class CoinController {
         return coinListTransRecordResp;
     }
 
+    @GetMapping("/testOOM")
+    public void testOOM() {
+        for (int i = 0; i < 1000000 ; i++) {
+            String a = new String("testOOM");
+        }
+    }
+
 }
